@@ -100,6 +100,7 @@ project "Scanner"
 	includedirs {
 		"%{IncludeDir.serial}",
 		"gt511c3/src",
+		"gt511c3/vendor",
 		"Scanner/src"
 	}
 

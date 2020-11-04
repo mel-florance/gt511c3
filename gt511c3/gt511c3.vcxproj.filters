@@ -39,40 +39,103 @@
     <ClInclude Include="src\gt511c3.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\serial\include\serial\impl\unix.h">
-      <Filter>vendor\serial\include\serial\impl</Filter>
+    <ClInclude Include="src\Application.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\serial\include\serial\impl\win.h">
-      <Filter>vendor\serial\include\serial\impl</Filter>
+    <ClInclude Include="src\Core.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\serial\include\serial\serial.h">
-      <Filter>vendor\serial\include\serial</Filter>
+    <ClInclude Include="src\Event.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\serial\include\serial\v8stdint.h">
-      <Filter>vendor\serial\include\serial</Filter>
+    <ClInclude Include="src\Window.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ApplicationEvent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KeyEvent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MouseEvent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entrypoint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImGuiLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LayerStack.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KeyCodes.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MouseButtons.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameLoop.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Clock.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Profiler.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Timer.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Scanner.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\serial\src\impl\list_ports\list_ports_linux.cc">
-      <Filter>vendor\serial\src\impl\list_ports</Filter>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\serial\src\impl\list_ports\list_ports_osx.cc">
-      <Filter>vendor\serial\src\impl\list_ports</Filter>
+    <ClCompile Include="src\Event.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\serial\src\impl\list_ports\list_ports_win.cc">
-      <Filter>vendor\serial\src\impl\list_ports</Filter>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\serial\src\impl\unix.cc">
-      <Filter>vendor\serial\src\impl</Filter>
+    <ClCompile Include="src\ImGuiBuild.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\serial\src\impl\win.cc">
-      <Filter>vendor\serial\src\impl</Filter>
+    <ClCompile Include="src\ImGuiLayer.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\serial\src\serial.cc">
-      <Filter>vendor\serial\src</Filter>
+    <ClCompile Include="src\Layer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LayerStack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameLoop.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Clock.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Profiler.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Timer.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
