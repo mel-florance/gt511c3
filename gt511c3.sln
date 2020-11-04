@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "gt511c3\vendor\ImG
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gt511c3", "gt511c3\gt511c3.vcxproj", "{AD46DF0E-1926-5EAA-223E-E9808E9CC40B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "serial", "gt511c3\vendor\serial\serial.vcxproj", "{C53E841B-B1E0-AEF1-9A9B-C24586DC3542}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -48,6 +50,12 @@ Global
 		{AD46DF0E-1926-5EAA-223E-E9808E9CC40B}.Dist|x64.Build.0 = Dist|x64
 		{AD46DF0E-1926-5EAA-223E-E9808E9CC40B}.Release|x64.ActiveCfg = Release|x64
 		{AD46DF0E-1926-5EAA-223E-E9808E9CC40B}.Release|x64.Build.0 = Release|x64
+		{C53E841B-B1E0-AEF1-9A9B-C24586DC3542}.Debug|x64.ActiveCfg = Debug|x64
+		{C53E841B-B1E0-AEF1-9A9B-C24586DC3542}.Debug|x64.Build.0 = Debug|x64
+		{C53E841B-B1E0-AEF1-9A9B-C24586DC3542}.Dist|x64.ActiveCfg = Dist|x64
+		{C53E841B-B1E0-AEF1-9A9B-C24586DC3542}.Dist|x64.Build.0 = Dist|x64
+		{C53E841B-B1E0-AEF1-9A9B-C24586DC3542}.Release|x64.ActiveCfg = Release|x64
+		{C53E841B-B1E0-AEF1-9A9B-C24586DC3542}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

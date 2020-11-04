@@ -16,7 +16,7 @@ IncludeDir["GLFW"] = "gt511c3/vendor/GLFW/include"
 IncludeDir["Glad"] = "gt511c3/vendor/Glad/include"
 IncludeDir["ImGui"] = "gt511c3/vendor/imgui"
 IncludeDir["stb"] = "gt511c3/vendor/stb"
-IncludeDir["serial"] = "gt511c3/vendor/serial"
+IncludeDir["serial"] = "gt511c3/vendor/serial/include"
 
 include "gt511c3/vendor/GLFW"
 include "gt511c3/vendor/Glad"	
@@ -46,7 +46,7 @@ project "gt511c3"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.stb}"
+		"%{IncludeDir.stb}",
 		"%{IncludeDir.serial}"
 	}
 
@@ -55,7 +55,7 @@ project "gt511c3"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32.lib"
+		"opengl32.lib",
 		"serial"
 	}
 

@@ -1,12 +1,19 @@
 #pragma once
 
 #include <climits>
+#include <iomanip>
 
 #define PACKET_SIZE 12
+#define PACKET_HEADER_SIZE 2
+#define PACKET_DEVICE_ID_SIZE 2
 #define PACKET_CHECKSUM_SIZE 2
+
 #define DEVICE_ID 0x0001
 #define START_CODE1 0x55
 #define START_CODE2 0xAA
+
+#define HEX(x) \
+	std::setw(2) << std::setfill('0') << std::hex << int(x)
 
 enum Command {
 	OPEN                 = 0x01, // Initialization
@@ -101,7 +108,7 @@ struct ResponsePacket {
 	unsigned char start_code2;
 	unsigned short device_id;
 	unsigned int parameter;
-	unsigned short response;
+	unsigned short command_code;
 	unsigned short checksum;
 };
 
@@ -120,7 +127,8 @@ struct DeviceInfoPacket {
 };
 
 template<typename T>
-int calc_packet_checksum(T* packet) {
+int calc_packet_checksum(T* packet)
+{
 	unsigned short checksum = 0;
 	unsigned char* buffer = reinterpret_cast<unsigned char*>(packet);
 
@@ -130,21 +138,17 @@ int calc_packet_checksum(T* packet) {
 	return checksum;
 }
 
-template <typename T>
-T swap_endian(T u)
+template<typename T>
+unsigned char* create_packet(int flags, Command command)
 {
-	static_assert (CHAR_BIT == 8, "CHAR_BIT != 8");
+	auto packet = new T();
 
-	union
-	{
-		T u;
-		unsigned char u8[sizeof(T)];
-	} source, dest;
+	packet->start_code1  = START_CODE1;
+	packet->start_code2  = START_CODE2;
+	packet->device_id    = DEVICE_ID;
+	packet->parameter    = flags;
+	packet->command_code = command;
+	packet->checksum     = calc_packet_checksum<T>(packet);
 
-	source.u = u;
-
-	for (size_t k = 0; k < sizeof(T); k++)
-		dest.u8[k] = source.u8[sizeof(T) - k - 1];
-
-	return dest.u;
+	return reinterpret_cast<unsigned char*>(packet);
 }

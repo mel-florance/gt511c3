@@ -1,9 +1,9 @@
-[submodule "Razor/vendor/GLFW"]
-	path = Razor/vendor/GLFW
+[submodule "gt511c3/vendor/GLFW"]
+	path = gt511c3/vendor/GLFW
 	url = https://github.com/TheCherno/GLFW
-[submodule "Razor/vendor/imgui"]
-	path = Razor/vendor/imgui
+[submodule "gt511c3/vendor/imgui"]
+	path = gt511c3/vendor/imgui
 	url = https://github.com/TheCherno/imgui
-[submodule "Razor/vendor/serial"]
+[submodule "gt511c3/vendor/serial"]
 	path = gt511c3/vendor/serial
 	url = https://github.com/Vyraax/serial

@@ -1,10 +1,6 @@
 #include "Scanner.h"
 #include "Protocol.h"
-#include <iomanip>
 #include <Windows.h>
-
-#define HEX(x) \
-	std::setw(2) << std::setfill('0') << std::hex << int(x)
 
 Scanner::Scanner() :
 	serial(nullptr),
@@ -71,27 +67,17 @@ void Scanner::list_ports()
 
 void Scanner::open(int flags)
 {
-	unsigned char buffer[PACKET_SIZE];
-
-	CommandPacket packet;
-	packet.start_code1 = START_CODE1;
-	packet.start_code2 = START_CODE2;
-	packet.device_id = DEVICE_ID;
-	packet.parameter = flags;
-	packet.command_code = Command::OPEN;
-	packet.checksum = calc_packet_checksum<CommandPacket>(&packet);
-
-	auto d = reinterpret_cast<unsigned char*>(&packet);
+	auto packet = create_packet<CommandPacket>(flags, Command::OPEN);
 
 	std::cout << "Bytes sent: " << std::endl;
 
 	for (int i = 0; i < PACKET_SIZE; i++) {
-		std::cout << HEX(int(d[i])) << " ";
+		std::cout << HEX(int(packet[i])) << " ";
 	}
 
 	std::cout << std::endl;
 
-	size_t w = serial->write(d, PACKET_SIZE);
+	size_t w = serial->write(packet, PACKET_SIZE);
 	std::cout << "Bytes written: " << std::dec << w << std::endl;
 
 	Sleep(50);
@@ -103,32 +89,33 @@ void Scanner::open(int flags)
 
 	auto res = reinterpret_cast<ResponsePacket*>(readBuf);
 
-	if (res->response == Command::ACK) {
+	if (res->command_code == Command::ACK) {
 		std::cout << "Acknowledge packet received" << std::endl;
 	}
 	else {
 		std::cout << "Error: " <<
-			get_error_code(res->response) << " (" << res->response << ")" <<
+			get_error_code(res->command_code) << " (" << res->command_code << ")" <<
 		std::endl;
 	}
 
-	if (flags) {
+	if (flags)
+	{
 		Sleep(50);
-		auto len = sizeof(DeviceInfoPacket) + 6;
-		uint8_t* readBufData = new uint8_t[len];
+		auto length = sizeof(DeviceInfoPacket) + 6;
+		uint8_t* data = new uint8_t[length];
 
-		auto r2 = serial->read(readBufData, len);
+		auto r2 = serial->read(data, length);
 		std::cout << "Bytes read: " << std::dec << r2 << std::endl;
 
-		for (int i = 0; i < len; i++)
-			std::cout << HEX(int(readBufData[i])) << " ";
+		for (int i = 0; i < length; i++)
+			std::cout << HEX(int(data[i])) << " ";
 
 		std::cout << std::endl;
 
-		uint8_t* tmp = new uint8_t[len];
-		std::memcpy(tmp, readBufData + 4, sizeof(DeviceInfoPacket));
+		uint8_t* buffer = new uint8_t[length];
+		std::memcpy(buffer, data + 4, sizeof(DeviceInfoPacket));
 
-		DeviceInfoPacket* info = reinterpret_cast<DeviceInfoPacket*>(tmp);
+		DeviceInfoPacket* info = reinterpret_cast<DeviceInfoPacket*>(buffer);
 
 		std::cout << "Version:\t" << info->firmware_version << std::endl;
 		std::cout << "ISO AMS:\t" << info->iso_area_max_size << std::endl;
@@ -147,8 +134,6 @@ void Scanner::close()
 {
 	toggle_led(0);
 	Sleep(100);
-
-	unsigned char buffer[PACKET_SIZE];
 
 	CommandPacket packet;
 	packet.start_code1 = START_CODE1;
@@ -179,8 +164,6 @@ void Scanner::add_user(int flags) {
 
 void Scanner::toggle_led(int flags)
 {
-	unsigned char buffer[PACKET_SIZE];
-
 	CommandPacket packet;
 	packet.start_code1 = START_CODE1;
 	packet.start_code2 = START_CODE2;
