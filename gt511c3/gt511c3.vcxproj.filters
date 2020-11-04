@@ -1,17 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="src">
-      <UniqueIdentifier>{7b9a8bab-71d1-4a30-84be-0de5d9704d6d}</UniqueIdentifier>
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scanner.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\serial">
+      <UniqueIdentifier>{C24DA021-2E0E-1C58-F748-65D563C86034}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\serial\include">
+      <UniqueIdentifier>{35177870-A183-336B-6A77-CBC8D6A255D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\serial\include\serial">
+      <UniqueIdentifier>{04ABCF42-F065-BFEE-991D-383985B7097F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\serial\include\serial\impl">
+      <UniqueIdentifier>{851F354B-F18D-8ACA-3A77-45CAA6248066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\serial\src">
+      <UniqueIdentifier>{D91CD170-4533-CF06-8EAA-5A28FAFF9F8E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\serial\src\impl">
+      <UniqueIdentifier>{7AFE9FE9-66F8-C83B-4F65-5F4C3BFE2EA8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\serial\src\impl\list_ports">
+      <UniqueIdentifier>{9C5F1EF3-08CE-7372-51B7-2E72BD64690E}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Protocol.h">
@@ -20,5 +36,43 @@
     <ClInclude Include="src\Scanner.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\gt511c3.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\serial\include\serial\impl\unix.h">
+      <Filter>vendor\serial\include\serial\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\serial\include\serial\impl\win.h">
+      <Filter>vendor\serial\include\serial\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\serial\include\serial\serial.h">
+      <Filter>vendor\serial\include\serial</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\serial\include\serial\v8stdint.h">
+      <Filter>vendor\serial\include\serial</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Scanner.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\serial\src\impl\list_ports\list_ports_linux.cc">
+      <Filter>vendor\serial\src\impl\list_ports</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\serial\src\impl\list_ports\list_ports_osx.cc">
+      <Filter>vendor\serial\src\impl\list_ports</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\serial\src\impl\list_ports\list_ports_win.cc">
+      <Filter>vendor\serial\src\impl\list_ports</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\serial\src\impl\unix.cc">
+      <Filter>vendor\serial\src\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\serial\src\impl\win.cc">
+      <Filter>vendor\serial\src\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\serial\src\serial.cc">
+      <Filter>vendor\serial\src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,6 +2,9 @@
 #include "Protocol.h"
 #include <Windows.h>
 
+#include <string>
+#include <iostream>
+
 Scanner::Scanner() :
 	serial(nullptr),
 	port("COM5"),
@@ -132,6 +135,7 @@ void Scanner::open(int flags)
 
 void Scanner::close() 
 {
+	Sleep(100);
 	toggle_led(0);
 	Sleep(100);
 

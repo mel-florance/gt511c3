@@ -5,8 +5,7 @@ workspace "gt511c3"
 	configurations
 	{
 		"Debug",
-		"Release",
-		"Dist"
+		"Release"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -26,13 +25,15 @@ include "gt511c3/vendor/serial"
 project "gt511c3"
 	location "gt511c3"
 	kind "StaticLib"
-	staticruntime "on"
 	language "C++"
  
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	linkoptions { "-IGNORE:4221", "-IGNORE:4006" }
+	linkoptions {
+		"-IGNORE:4221",
+		"-IGNORE:4006"
+	}
 
 	files
 	{
@@ -42,21 +43,21 @@ project "gt511c3"
 
 	includedirs
 	{
-		"%{prj.name}/src",
+		"%{IncludeDir.serial}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.serial}"
+		"%{prj.name}/src"
 	}
 
-	links
-	{
+	links {
+		"serial",
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"Setupapi.lib",
 		"opengl32.lib",
-		"serial"
 	}
 
 	filter "system:windows"
@@ -64,18 +65,11 @@ project "gt511c3"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines
-		{
+		defines {
 			"IMGUI_API=__declspec(dllexport)",
 			"GT_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE",
 			"_CRT_SECURE_NO_WARNINGS"
-		}
-
-		postbuildcommands
-		{
-			--"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox",
-			--"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Server",
 		}
 
 	filter "configurations:Debug"
@@ -87,34 +81,30 @@ project "gt511c3"
 		defines "GT_RELEASE"
 		runtime "Release"
 		optimize "On"
-		
-	filter "configurations:Dist"
-		defines "GT_DIST"
-		runtime "Release"
-		optimize "On"
 
 
 project "Scanner"
 	location "Scanner"
-
 	language "C++"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
+	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/serial/include/**",
+		"%{prj.name}/vendor/serial/src/**"
 	}
 
-	includedirs
-	{
+	includedirs {
+		"%{IncludeDir.serial}",
+		"gt511c3/src",
 		"Scanner/src"
 	}
 
-	links
-	{
+	links {
+		"serial",
 		"gt511c3"
 	}
 
@@ -123,8 +113,7 @@ project "Scanner"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines
-		{
+		defines {
 			"GT_PLATFORM_WINDOWS"
 		}
 
@@ -135,12 +124,6 @@ project "Scanner"
 		
 	filter "configurations:Release"
 		defines "GT_RELEASE"
-		optimize "On"
-		kind "WindowedApp"
-		entrypoint "mainCRTStartup" 
-		
-	filter "configurations:Dist"
-		defines "GT_DIST"
 		optimize "On"
 		kind "WindowedApp"
 		entrypoint "mainCRTStartup" 
