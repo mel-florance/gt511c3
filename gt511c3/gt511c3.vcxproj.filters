@@ -1,153 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    <Filter Include="Application">
+      <UniqueIdentifier>{D9DE78AF-4594-F1A4-CE88-EB7B3A3DE8A8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor">
-      <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor\serial">
-      <UniqueIdentifier>{C24DA021-2E0E-1C58-F748-65D563C86034}</UniqueIdentifier>
+    <Filter Include="Events">
+      <UniqueIdentifier>{3A8963B1-262B-8E87-0FE6-A1DBFB2615D8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor\serial\include">
-      <UniqueIdentifier>{35177870-A183-336B-6A77-CBC8D6A255D3}</UniqueIdentifier>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{764D2783-E2B7-DBF9-2BF6-8C9F979FB94E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor\serial\include\serial">
-      <UniqueIdentifier>{04ABCF42-F065-BFEE-991D-383985B7097F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\serial\include\serial\impl">
-      <UniqueIdentifier>{851F354B-F18D-8ACA-3A77-45CAA6248066}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\serial\src">
-      <UniqueIdentifier>{D91CD170-4533-CF06-8EAA-5A28FAFF9F8E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\serial\src\impl">
-      <UniqueIdentifier>{7AFE9FE9-66F8-C83B-4F65-5F4C3BFE2EA8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\serial\src\impl\list_ports">
-      <UniqueIdentifier>{9C5F1EF3-08CE-7372-51B7-2E72BD64690E}</UniqueIdentifier>
+    <Filter Include="Scanner">
+      <UniqueIdentifier>{2F82E9E6-9B61-6882-A479-F35810D8CEE3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Protocol.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Application\Application.h">
+      <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scanner.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Application\Entrypoint.h">
+      <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="src\gt511c3.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Core\Clock.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Application.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Core\Core.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Core\Engine.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Event.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Core\GameLoop.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Core\Profiler.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\ApplicationEvent.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Core\Timer.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\KeyEvent.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Core\Utils.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\MouseEvent.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Events\ApplicationEvent.h">
+      <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Entrypoint.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Events\Event.h">
+      <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGuiLayer.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Events\Input.h">
+      <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Layer.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Events\KeyCodes.h">
+      <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\LayerStack.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Events\KeyEvent.h">
+      <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Events\MouseButtons.h">
+      <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Input.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Events\MouseEvent.h">
+      <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\KeyCodes.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Interface\ImGuiLayer.h">
+      <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\MouseButtons.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Interface\Layer.h">
+      <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameLoop.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Interface\LayerStack.h">
+      <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\Clock.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Interface\Texture.h">
+      <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\Profiler.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Interface\Window.h">
+      <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\Timer.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Scanner\Protocol.h">
+      <Filter>Scanner</Filter>
     </ClInclude>
-    <ClInclude Include="src\Texture.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Scanner\Scanner.h">
+      <Filter>Scanner</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils.h">
-      <Filter>src</Filter>
-    </ClInclude>
+    <ClInclude Include="src\gt511c3.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Scanner.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Application\Application.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="src\Application.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Core\Clock.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Event.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Core\Engine.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Core\GameLoop.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGuiBuild.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Core\Profiler.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGuiLayer.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Core\Timer.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Layer.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Core\Utils.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\LayerStack.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Events\Event.cpp">
+      <Filter>Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Interface\ImGuiBuild.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameLoop.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Interface\ImGuiLayer.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\Clock.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Interface\Layer.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\Profiler.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Interface\LayerStack.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\Timer.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Interface\Texture.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\Texture.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Interface\Window.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\Scanner\Scanner.cpp">
+      <Filter>Scanner</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

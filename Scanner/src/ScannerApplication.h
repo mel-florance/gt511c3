@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Application.h"
-#include "ImGuiLayer.h"
-#include "Scanner.h"
+#include "Application/Application.h"
+#include "Interface/ImGuiLayer.h"
+#include "Scanner/Scanner.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"

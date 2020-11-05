@@ -1,11 +1,11 @@
 #include "Application.h"
-#include "ApplicationEvent.h"
+#include "Events/ApplicationEvent.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-#include "Engine.h"
-#include "Input.h"
+#include "Core/Engine.h"
+#include "Events/Input.h"
 
 Application* Application::s_Instance = nullptr;
 

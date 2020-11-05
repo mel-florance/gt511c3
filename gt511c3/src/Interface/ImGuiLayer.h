@@ -2,9 +2,9 @@
 
 #include "Layer.h"
 
-#include "ApplicationEvent.h"
-#include "KeyEvent.h"
-#include "MouseEvent.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
 
 class ImGuiLayer : public Layer
 {

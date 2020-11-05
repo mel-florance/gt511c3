@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "Utils.h"
+#include "Core/Utils.h"
 #include <iostream>
 #include "glad/glad.h"
 

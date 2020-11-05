@@ -1,8 +1,8 @@
 #include "Engine.h"
-#include "Application.h"
-#include "LayerStack.h"
-#include "Event.h"
-#include "KeyCodes.h"
+#include "Application/Application.h"
+#include "Interface/LayerStack.h"
+#include "Events/Event.h"
+#include "Events/KeyCodes.h"
 #include "GLFW/glfw3.h"
 #include <glad/glad.h>
 

@@ -98,47 +98,47 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\ApplicationEvent.h" />
-    <ClInclude Include="src\Clock.h" />
-    <ClInclude Include="src\Core.h" />
-    <ClInclude Include="src\Engine.h" />
-    <ClInclude Include="src\Entrypoint.h" />
-    <ClInclude Include="src\Event.h" />
-    <ClInclude Include="src\GameLoop.h" />
-    <ClInclude Include="src\ImGuiLayer.h" />
-    <ClInclude Include="src\Input.h" />
-    <ClInclude Include="src\KeyCodes.h" />
-    <ClInclude Include="src\KeyEvent.h" />
-    <ClInclude Include="src\Layer.h" />
-    <ClInclude Include="src\LayerStack.h" />
-    <ClInclude Include="src\MouseButtons.h" />
-    <ClInclude Include="src\MouseEvent.h" />
-    <ClInclude Include="src\Profiler.h" />
-    <ClInclude Include="src\Protocol.h" />
-    <ClInclude Include="src\Scanner.h" />
-    <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\Timer.h" />
-    <ClInclude Include="src\Utils.h" />
-    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Application\Application.h" />
+    <ClInclude Include="src\Application\Entrypoint.h" />
+    <ClInclude Include="src\Core\Clock.h" />
+    <ClInclude Include="src\Core\Core.h" />
+    <ClInclude Include="src\Core\Engine.h" />
+    <ClInclude Include="src\Core\GameLoop.h" />
+    <ClInclude Include="src\Core\Profiler.h" />
+    <ClInclude Include="src\Core\Timer.h" />
+    <ClInclude Include="src\Core\Utils.h" />
+    <ClInclude Include="src\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Events\Event.h" />
+    <ClInclude Include="src\Events\Input.h" />
+    <ClInclude Include="src\Events\KeyCodes.h" />
+    <ClInclude Include="src\Events\KeyEvent.h" />
+    <ClInclude Include="src\Events\MouseButtons.h" />
+    <ClInclude Include="src\Events\MouseEvent.h" />
+    <ClInclude Include="src\Interface\ImGuiLayer.h" />
+    <ClInclude Include="src\Interface\Layer.h" />
+    <ClInclude Include="src\Interface\LayerStack.h" />
+    <ClInclude Include="src\Interface\Texture.h" />
+    <ClInclude Include="src\Interface\Window.h" />
+    <ClInclude Include="src\Scanner\Protocol.h" />
+    <ClInclude Include="src\Scanner\Scanner.h" />
     <ClInclude Include="src\gt511c3.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\Clock.cpp" />
-    <ClCompile Include="src\Engine.cpp" />
-    <ClCompile Include="src\Event.cpp" />
-    <ClCompile Include="src\GameLoop.cpp" />
-    <ClCompile Include="src\ImGuiBuild.cpp" />
-    <ClCompile Include="src\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Layer.cpp" />
-    <ClCompile Include="src\LayerStack.cpp" />
-    <ClCompile Include="src\Profiler.cpp" />
-    <ClCompile Include="src\Scanner.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\Timer.cpp" />
-    <ClCompile Include="src\Utils.cpp" />
-    <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\Core\Clock.cpp" />
+    <ClCompile Include="src\Core\Engine.cpp" />
+    <ClCompile Include="src\Core\GameLoop.cpp" />
+    <ClCompile Include="src\Core\Profiler.cpp" />
+    <ClCompile Include="src\Core\Timer.cpp" />
+    <ClCompile Include="src\Core\Utils.cpp" />
+    <ClCompile Include="src\Events\Event.cpp" />
+    <ClCompile Include="src\Interface\ImGuiBuild.cpp" />
+    <ClCompile Include="src\Interface\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Interface\Layer.cpp" />
+    <ClCompile Include="src\Interface\LayerStack.cpp" />
+    <ClCompile Include="src\Interface\Texture.cpp" />
+    <ClCompile Include="src\Interface\Window.cpp" />
+    <ClCompile Include="src\Scanner\Scanner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\serial\serial.vcxproj">

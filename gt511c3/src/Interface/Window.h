@@ -2,8 +2,8 @@
 
 #include <functional>
 
-#include "Core.h"
-#include "Event.h"
+#include "Core/Core.h"
+#include "Events/Event.h"
 
 struct GLFWwindow;
 

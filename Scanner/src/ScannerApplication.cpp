@@ -6,7 +6,7 @@
 #include <Windows.h>
 #endif
 
-#include "Protocol.h"
+#include "Scanner/Protocol.h"
 
 ScannerApplication::ScannerApplication() : Application(false)
 {

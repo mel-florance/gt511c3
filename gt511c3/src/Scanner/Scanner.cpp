@@ -1,7 +1,7 @@
 #include "Scanner.h"
 #include "Protocol.h"
 #include <Windows.h>
-#include "Texture.h"
+#include "Interface/Texture.h"
 #include <string>
 #include <iostream>
 

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <functional>
-#include "Core.h"
+#include "Core/Core.h"
 
 enum class EventType
 {

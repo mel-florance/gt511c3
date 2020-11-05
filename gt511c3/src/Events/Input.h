@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include "Core.h"
+#include "Core/Core.h"
 
 class Input
 {
