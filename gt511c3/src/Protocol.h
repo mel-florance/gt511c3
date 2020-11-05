@@ -7,13 +7,15 @@
 #define PACKET_HEADER_SIZE 2
 #define PACKET_DEVICE_ID_SIZE 2
 #define PACKET_CHECKSUM_SIZE 2
+#define PACKET_IMAGE_SIZE 52116
+#define PACKET_RAW_IMAGE_SIZE 19200
 
 #define DEVICE_ID 0x0001
 #define START_CODE1 0x55
 #define START_CODE2 0xAA
 
 #define HEX(x) \
-	std::setw(2) << std::setfill('0') << std::hex << int(x)
+	std::setw(2) << std::setfill('0') << std::uppercase << std::hex << int(x)
 
 enum Command {
 	OPEN                 = 0x01, // Initialization
@@ -70,8 +72,19 @@ enum Error {
 	NACK_FINGER_IS_NOT_PRESSED = 0x1012  // Finger isn't pressed
 };
 
-const char* get_error_code(int code) {
-	switch (code) {
+template<typename T>
+std::string int_to_hex(T i)
+{
+	std::stringstream stream;
+	stream
+		<< std::setfill('0') << std::setw(sizeof(T) * 2)
+		<< std::uppercase << std::hex << i;
+
+	return stream.str();
+}
+
+static const char* get_error_code(int code) {
+	switch (std::atoi(int_to_hex(code).c_str())) {
 	default:						 return "UNDEFINED";
 	case Error::NACK_TIMEOUT:               return "NACK_TIMEOUT";
 	case Error::NACK_INVALID_BAUD_RATE:     return "NACK_INVALID_BAUD_RATE";
@@ -152,3 +165,4 @@ unsigned char* create_packet(int flags, Command command)
 
 	return reinterpret_cast<unsigned char*>(packet);
 }
+

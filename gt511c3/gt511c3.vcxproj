@@ -117,7 +117,9 @@
     <ClInclude Include="src\Profiler.h" />
     <ClInclude Include="src\Protocol.h" />
     <ClInclude Include="src\Scanner.h" />
+    <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Timer.h" />
+    <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\gt511c3.h" />
   </ItemGroup>
@@ -133,7 +135,9 @@
     <ClCompile Include="src\LayerStack.cpp" />
     <ClCompile Include="src\Profiler.cpp" />
     <ClCompile Include="src\Scanner.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Timer.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>

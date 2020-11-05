@@ -5,6 +5,7 @@
 #endif
 
 #include "Scanner.h"
+#include "Protocol.h"
 #include "Application.h"
 #include "Layer.h"
 #include "ImGuiLayer.h"
