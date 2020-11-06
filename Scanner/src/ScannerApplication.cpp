@@ -7,6 +7,7 @@
 #endif
 
 #include "Scanner/Protocol.h"
+#include "Scanner/Scanner.h"
 
 ScannerApplication::ScannerApplication() : Application(false)
 {
@@ -68,13 +69,13 @@ void ApplicationLayer::OnUpdate(float delta)
 		}
 	}
 
-	if (watch_finger) {
+	if (watch_finger && serial_connected) {
 		finger_timer += delta;
 
-		if (finger_timer >= 0.2f && finger_status == 1) {
+		if (finger_timer >= 0.0f && finger_status == 1) {
 			finger_status = 0;
 		}
-		else if (finger_timer >= 0.4f && finger_status == 0) {
+		else if (finger_timer >= 0.3f && finger_status == 0) {
 			is_finger_pressed = scanner->is_finger_pressed();
 			finger_timer = 0.0f;
 			finger_status = 1;
