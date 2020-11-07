@@ -79,6 +79,11 @@ project "gt511c3"
 			runtime "Release"
 			optimize "On"
 
+		postbuildcommands {
+			"{COPY} ../Scanner/data ../bin/Release-windows-x86_64/Scanner/data",
+			"{COPY} ../Scanner/data ../bin/Debug-windows-x86_64/Scanner/data",
+		}
+
 	filter "system:linux"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -114,10 +119,10 @@ project "gt511c3"
 			runtime "Release"
 			optimize "On"
 
-	postbuildcommands {
-		"{COPY} ../Scanner/data ../bin/Release-windows-x86_64/Scanner/data",
-		"{COPY} ../Scanner/data ../bin/Debug-windows-x86_64/Scanner/data",
-	}
+		postbuildcommands {
+			"{COPY} ../Scanner/data ../bin/Release-linux-x86_64/Scanner/data",
+			"{COPY} ../Scanner/data ../bin/Debug-linux-x86_64/Scanner/data",
+		}
 
 project "Scanner"
 	location "Scanner"
