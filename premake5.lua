@@ -2,13 +2,10 @@ workspace "gt511c3"
 	architecture "x64"
 	startproject "Scanner"
 
-	configurations
-	{
+	configurations {
 		"Debug",
 		"Release"
 	}
-
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "gt511c3/vendor/GLFW/include"
@@ -16,6 +13,8 @@ IncludeDir["Glad"] = "gt511c3/vendor/Glad/include"
 IncludeDir["imgui"] = "gt511c3/vendor/imgui"
 IncludeDir["stb"] = "gt511c3/vendor/stb"
 IncludeDir["serial"] = "gt511c3/vendor/serial/include"
+
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "gt511c3/vendor/GLFW"
 include "gt511c3/vendor/Glad"	
@@ -35,14 +34,12 @@ project "gt511c3"
 		"-IGNORE:4006"
 	}
 
-	files
-	{
+	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
 	}
 
-	includedirs
-	{
+	includedirs {
 		"%{IncludeDir.serial}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
@@ -82,6 +79,10 @@ project "gt511c3"
 		runtime "Release"
 		optimize "On"
 
+	postbuildcommands {
+		"{COPY} ../Scanner/data ../bin/Release-windows-x86_64/Scanner/data",
+		"{COPY} ../Scanner/data ../bin/Debug-windows-x86_64/Scanner/data",
+	}
 
 project "Scanner"
 	location "Scanner"
@@ -126,5 +127,6 @@ project "Scanner"
 	filter "configurations:Release"
 		defines "GT_RELEASE"
 		optimize "On"
+		symbols "Off"
 		kind "WindowedApp"
 		entrypoint "mainCRTStartup" 
