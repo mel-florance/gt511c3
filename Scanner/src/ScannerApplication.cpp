@@ -110,16 +110,16 @@ void ApplicationLayer::OnEvent(Event& event) {
 
 void ApplicationLayer::OnImGuiRender()
 {
-	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(viewport->Pos);
-	ImGui::SetNextWindowSize(viewport->Size);
-	ImGui::SetNextWindowViewport(viewport->ID);
+	//ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	ImGui::SetNextWindowSize(ImVec2(1280.0f, 720.0f));
+	//ImGui::SetNextWindowViewport(viewport->ID);
 
 	bool p_open;
-	static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
+	//static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 	ImGuiWindowFlags window_flags =
 		ImGuiWindowFlags_NoTitleBar |
-		ImGuiWindowFlags_DockNodeHost |
+		//ImGuiWindowFlags_DockNodeHost |
 		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoBackground;
 
@@ -127,9 +127,9 @@ void ApplicationLayer::OnImGuiRender()
 	ImGui::Begin("ApplicationLayer", &p_open, window_flags);
 	ImGui::PopStyleVar();
 
-	ImGui::SetNextWindowPos(viewport->Pos);
-	ImGui::SetNextWindowSize(viewport->Size);
-	ImGui::SetNextWindowViewport(viewport->ID);
+	//ImGui::SetNextWindowPos(viewport->Pos);
+	//ImGui::SetNextWindowSize(viewport->Size);
+	//ImGui::SetNextWindowViewport(viewport->ID);
 	ImGui::BeginChild("menus");
 
 	ImGui::SetNextItemWidth(150);
