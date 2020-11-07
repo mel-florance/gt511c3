@@ -13,13 +13,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "gt511c3/vendor/GLFW/include"
 IncludeDir["Glad"] = "gt511c3/vendor/Glad/include"
-IncludeDir["ImGui"] = "gt511c3/vendor/imgui"
+IncludeDir["imgui"] = "gt511c3/vendor/imgui"
 IncludeDir["stb"] = "gt511c3/vendor/stb"
 IncludeDir["serial"] = "gt511c3/vendor/serial/include"
 
 include "gt511c3/vendor/GLFW"
 include "gt511c3/vendor/Glad"	
-include "gt511c3/vendor/ImGui"
+include "gt511c3/vendor/imgui"
 include "gt511c3/vendor/serial"
 
 project "gt511c3"
@@ -46,7 +46,7 @@ project "gt511c3"
 		"%{IncludeDir.serial}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.imgui}",
 		"%{IncludeDir.stb}",
 		"%{prj.name}/src"
 	}
@@ -55,7 +55,7 @@ project "gt511c3"
 		"serial",
 		"GLFW",
 		"Glad",
-		"ImGui",
+		"imgui",
 		"Setupapi.lib",
 		"opengl32.lib",
 	}
