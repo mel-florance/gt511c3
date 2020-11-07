@@ -1,5 +1,9 @@
 #include "Scanner.h"
+
+#ifdef GT_PLATFORM_WINDOWS
 #include <Windows.h>
+#endif
+
 #include "Interface/Texture.h"
 #include "Core/Utils.h"
 #include <string>
