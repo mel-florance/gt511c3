@@ -12,6 +12,9 @@
 #include <Windows.h>
 #include <commdlg.h>
 #endif
+#ifdef GT_PLATFORM_LINUX
+#include <unistd.h>
+#endif
 
 class Utils
 {
@@ -218,6 +221,15 @@ public:
 		}
 
 		return str;
+	}
+
+	static void platform_sleep(int millis) {
+#ifdef GT_PLATFORM_WINDOWS
+		Sleep(millis);
+#endif
+#ifdef GT_PLATFORM_LINUX
+		usleep(millis);
+#endif
 	}
 
 	template <typename F, typename T>

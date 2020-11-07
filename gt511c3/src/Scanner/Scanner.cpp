@@ -1,6 +1,7 @@
 #include "Scanner.h"
 #include <Windows.h>
 #include "Interface/Texture.h"
+#include "Core/Utils.h"
 #include <string>
 #include <iostream>
 
@@ -117,7 +118,7 @@ void Scanner::add_user(int flags) {
 	std::cout << "-----------------------" << std::endl;
 
 	toggle_led(1);
-	Sleep(100);
+	Utils::platform_sleep(100);
 }
 
 unsigned int Scanner::get_users_count()
@@ -261,7 +262,7 @@ unsigned char* Scanner::get_image()
 	size_t w = serial->write(d, PACKET_SIZE);
 	std::cout << "Bytes written: " << std::dec << w << std::endl;
 
-	Sleep(100);
+	Utils::platform_sleep(100);
 
 	uint8_t* readBuf = new uint8_t[PACKET_SIZE];
 	auto r = serial->read(readBuf, PACKET_SIZE);
@@ -274,9 +275,9 @@ unsigned char* Scanner::get_image()
 		std::cout << "Acknowledge packet received" << std::endl;
 		std::cout << "Getting image..." << std::endl;
 
-		Sleep(100);
+		Utils::platform_sleep(100);
 		change_baud_rate(115200);
-		Sleep(100);
+		Utils::platform_sleep(100);
 
 		uint8_t* readBuf = new uint8_t[PACKET_IMAGE_SIZE];
 		auto r2 = serial->read(readBuf, PACKET_IMAGE_SIZE);
@@ -315,7 +316,7 @@ Texture* Scanner::get_raw_image()
 	}
 
 	std::cout << std::endl;
-	Sleep(100);
+	Utils::platform_sleep(100);
 	size_t w = serial->write(d, PACKET_SIZE);
 	std::cout << "Bytes written: " << std::dec << w << std::endl;
 
@@ -325,7 +326,7 @@ Texture* Scanner::get_raw_image()
 
 	auto res = reinterpret_cast<ResponsePacket*>(readBuf);
 
-	Sleep(100);
+	Utils::platform_sleep(100);
 
 	if (res->command_code == Command::ACK) {
 		std::cout << "Acknowledge packet received" << std::endl;
@@ -335,9 +336,10 @@ Texture* Scanner::get_raw_image()
 	
 	
 		serial->setBaudrate(115200);
-		Sleep(300);
+		Utils::platform_sleep(300);
 		change_baud_rate(115200);
-		Sleep(300);
+		Utils::platform_sleep(300);
+
 		serial->setTimeout(0, 100, 1, 100, 1);
 		std::cout << "Getting raw image..." << std::endl;
 		auto b = serial->read(gbyImgRaw2, sizeof gbyImgRaw2 + 6);
@@ -363,11 +365,11 @@ Texture* Scanner::get_raw_image()
 			std::endl;
 	}
 
-	Sleep(100);
+	Utils::platform_sleep(100);
 	serial->setBaudrate(9600);
-	Sleep(300);
+	Utils::platform_sleep(300);
 	change_baud_rate(9600);
-	Sleep(100);
+	Utils::platform_sleep(100);
 
 	return nullptr;
 }
@@ -377,7 +379,7 @@ size_t Scanner::send(Command command, int flags)
 {
 	std::cout << "-----------------------" << std::endl;
 	std::cout << "SENDING: " << command_to_string(command) << std::endl;
-	Sleep(100);
+	Utils::platform_sleep(100);
 
 	unsigned char* packet = create_packet<T>(command, flags);
 	size_t bytes = serial->write(packet, PACKET_SIZE);
@@ -398,7 +400,7 @@ size_t Scanner::send(Command command, int flags)
 template<typename T>
 T* Scanner::receive(size_t length, int offset)
 {
-	Sleep(100);
+	Utils::platform_sleep(100);
 
 	uint8_t* buffer = new uint8_t[length];
 	size_t bytes = serial->read(buffer, length);

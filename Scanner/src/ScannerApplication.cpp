@@ -66,7 +66,7 @@ ApplicationLayer::ApplicationLayer(Engine* engine) :
 ApplicationLayer::~ApplicationLayer()
 {
 	scanner->toggle_led(0);
-	Sleep(100);
+	Utils::platform_sleep(100);
 	scanner->close();
 }
 

@@ -1,6 +1,7 @@
 #include "GameLoop.h"
 #include "Engine.h"
 #include "Clock.h"
+#include "Utils.h"
 
 #ifdef GT_PLATFORM_WINDOWS
 #include "Windows.h"
@@ -88,7 +89,7 @@ void GameLoop::start()
 		m_frames++;
 
 		m_profiler->startTimer("sleep");
-		Sleep(m_sleepTime);
+		Utils::platform_sleep(m_sleepTime);
 		m_profiler->stopTimer("sleep");
 
 		m_profiler->stopTimer("frame");

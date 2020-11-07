@@ -6,6 +6,7 @@
 #include "Interface/ImGuiLayer.h"
 #include "Scanner/Scanner.h"
 #include "DevicesManager.h"
+#include "Core/Utils.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
