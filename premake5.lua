@@ -85,7 +85,7 @@ project "gt511c3"
 		systemversion "latest"
 
 		defines {
-			"IMGUI_API=__declspec(dllexport)",
+			"IMGUI_API=__attribute__((visibility(\"default\")))",
 			"GT_PLATFORM_LINUX",
 			"GLFW_INCLUDE_NONE",
 			"_CRT_SECURE_NO_WARNINGS"
