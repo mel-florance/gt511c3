@@ -69,6 +69,16 @@ project "gt511c3"
 			"opengl32.lib",
 		}
 
+		filter "configurations:Debug"
+			defines "GT_DEBUG"
+			buildoptions {"/MTd"}
+			symbols "On"
+		
+		filter "configurations:Release"
+			defines "GT_RELEASE"
+			runtime "Release"
+			optimize "On"
+
 	filter "system:linux"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -86,19 +96,23 @@ project "gt511c3"
 			"GLFW",
 			"Glad",
 			"imgui",
+			"X11",
+			"XCursor",
+			"Xrandr",
+			"Xinerama",
+			"GL",
 			"Setupapi.lib",
-			"opengl32.lib",
+			"opengl32.lib"
 		}
 
-	filter "configurations:Debug"
-		defines "GT_DEBUG"
-		buildoptions {"/MTd"}
-		symbols "On"
+		filter "configurations:Debug"
+			defines "GT_DEBUG"
+			symbols "On"
 		
-	filter "configurations:Release"
-		defines "GT_RELEASE"
-		runtime "Release"
-		optimize "On"
+		filter "configurations:Release"
+			defines "GT_RELEASE"
+			runtime "Release"
+			optimize "On"
 
 	postbuildcommands {
 		"{COPY} ../Scanner/data ../bin/Release-windows-x86_64/Scanner/data",
