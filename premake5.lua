@@ -135,6 +135,9 @@ project "Scanner"
 
 	includedirs {
 		"%{IncludeDir.serial}",
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
 		"gt511c3/src",
 		"gt511c3/vendor",
 		"Scanner/src"

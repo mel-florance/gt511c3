@@ -13,4 +13,7 @@
 #include "Events/KeyCodes.h"
 #include "Core/Engine.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
+
 #include "Application/Entrypoint.h"
