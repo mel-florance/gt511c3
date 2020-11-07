@@ -71,7 +71,7 @@ project "gt511c3"
 
 		filter "configurations:Debug"
 			defines "GT_DEBUG"
-			buildoptions {"/MTd"}
+			-- buildoptions {"/MTd"}
 			symbols "On"
 		
 		filter "configurations:Release"
