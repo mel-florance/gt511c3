@@ -410,7 +410,7 @@ T* Scanner::receive(size_t length, int offset)
 	size_t bytes = serial->read(buffer, length);
 
 	uint8_t* data = new uint8_t[length];
-	std::memcpy(data, buffer + offset, sizeof T);
+	std::memcpy(data, buffer + offset, sizeof(T));
 
 	auto response = reinterpret_cast<T*>(data);
 

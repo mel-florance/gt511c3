@@ -44,7 +44,7 @@ public:
 	size_t send(Command command, int flags = 0);
 
 	template<typename T>
-	T* receive(size_t length = sizeof T, int offset = 0);
+	T* receive(size_t length = sizeof(T), int offset = 0);
 
 private:
 	std::unique_ptr<serial::Serial> serial;
