@@ -7,6 +7,7 @@
 #include <set>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 
 #ifdef GT_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -282,12 +283,11 @@ public:
 
 		return GetSaveFileNameA(&ofn) ? std::string(ofn.lpstrFile) : "";
 	}
-#endif
 
 	static std::string folderDialog() {
 		return readfileDialog(OFN_PATHMUSTEXIST);
 	}
-
+#endif
 	template<class T>
 	static std::string numberFormatLocale(T value, char sep = ' ') {
 		struct Numpunct : public std::numpunct<char> 
