@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Core/Core.h"
 #include "Interface/Window.h"
 #include "Events/Event.h"
