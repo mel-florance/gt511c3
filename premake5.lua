@@ -53,6 +53,11 @@ project "gt511c3"
 		staticruntime "On"
 		systemversion "latest"
 
+		postbuildcommands {
+			"{COPY} ../Scanner/data ../bin/Release-windows-x86_64/Scanner/data",
+			"{COPY} ../Scanner/data ../bin/Debug-windows-x86_64/Scanner/data",
+		}
+
 		defines {
 			"IMGUI_API=__declspec(dllexport)",
 			"GT_PLATFORM_WINDOWS",
@@ -69,25 +74,15 @@ project "gt511c3"
 			"opengl32.lib",
 		}
 
-		filter "configurations:Debug"
-			defines "GT_DEBUG"
-			-- buildoptions {"/MTd"}
-			symbols "On"
-		
-		filter "configurations:Release"
-			defines "GT_RELEASE"
-			runtime "Release"
-			optimize "On"
-
-		postbuildcommands {
-			"{COPY} ../Scanner/data ../bin/Release-windows-x86_64/Scanner/data",
-			"{COPY} ../Scanner/data ../bin/Debug-windows-x86_64/Scanner/data",
-		}
-
 	filter "system:linux"
 		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
+
+		postbuildcommands {
+			"{COPY} ../Scanner/data ../bin/Release-linux-x86_64/Scanner/data",
+			"{COPY} ../Scanner/data ../bin/Debug-linux-x86_64/Scanner/data",
+		}
 
 		defines {
 			"IMGUI_API=__attribute__((visibility(\"default\")))",
@@ -110,19 +105,14 @@ project "gt511c3"
 			"opengl32.lib"
 		}
 
-		filter "configurations:Debug"
-			defines "GT_DEBUG"
-			symbols "On"
+	filter "configurations:Debug"
+		defines "GT_DEBUG"
+		symbols "On"
 		
-		filter "configurations:Release"
-			defines "GT_RELEASE"
-			runtime "Release"
-			optimize "On"
-
-		postbuildcommands {
-			"{COPY} ../Scanner/data ../bin/Release-linux-x86_64/Scanner/data",
-			"{COPY} ../Scanner/data ../bin/Debug-linux-x86_64/Scanner/data",
-		}
+	filter "configurations:Release"
+		defines "GT_RELEASE"
+		runtime "Release"
+		optimize "On"
 
 project "Scanner"
 	location "Scanner"
