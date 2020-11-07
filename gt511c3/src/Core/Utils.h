@@ -21,15 +21,6 @@ class Utils
 {
 public:
 
-	static bool treeNode(
-		const char* label,
-		bool has_icon = true,
-		bool stripe = true,
-		const std::string& icon_name = "arrow_button",
-		const std::string& icon_hover = std::string(),
-		bool selected = false
-	);
-
 	static void initColumns(float size);
 
 	static inline float lerp(float a, float b, float time) {
