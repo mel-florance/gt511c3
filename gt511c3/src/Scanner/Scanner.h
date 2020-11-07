@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 #include <serial/serial.h>
 
 #include "Protocol.h"
@@ -17,12 +18,16 @@ public:
 	bool connect();
 	void disconnect();
 	void test_transmission();
-	std::vector<std::string> get_ports_list();
+	std::unordered_map<std::string, std::string> get_ports_list();
 
 	void open(int flags);
 	void close();
 	void add_user(int flags);
-	void toggle_led(int flags);
+	unsigned int get_users_count();
+	bool user_exists(int flags);
+	bool delete_user(int flags);
+	bool delete_all_users();
+	bool toggle_led(int flags);
 	bool is_finger_pressed();
 	bool change_baud_rate(int flags);
 	unsigned char* get_image();

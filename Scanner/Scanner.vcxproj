@@ -92,9 +92,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\DevicesManager.h" />
     <ClInclude Include="src\ScannerApplication.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DevicesManager.cpp" />
     <ClCompile Include="src\ScannerApplication.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>

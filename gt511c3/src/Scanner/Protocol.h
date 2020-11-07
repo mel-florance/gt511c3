@@ -85,7 +85,7 @@ std::string int_to_hex(T i)
 
 static const char* get_error_code(int code) {
 	switch (std::atoi(int_to_hex(code).c_str())) {
-	default:						 return "UNDEFINED";
+	default:								return "UNDEFINED";
 	case Error::NACK_TIMEOUT:               return "NACK_TIMEOUT";
 	case Error::NACK_INVALID_BAUD_RATE:     return "NACK_INVALID_BAUD_RATE";
 	case Error::NACK_INVALID_POS:           return "NACK_INVALID_POS";
@@ -104,6 +104,43 @@ static const char* get_error_code(int code) {
 	case Error::NACK_CAPTURE_CANCELLED:     return "NACK_CAPTURE_CANCELLED";
 	case Error::NACK_INVALID_PARAM:         return "NACK_INVALID_PARAM";
 	case Error::NACK_FINGER_IS_NOT_PRESSED: return "NACK_FINGER_IS_NOT_PRESSED";
+	}
+}
+
+static const char* command_to_string(Command command) {
+	switch (command) {
+	default: return "DATA";
+	case Command::OPEN: return "OPEN";
+	case Command::CLOSE: return "CLOSE";
+	case Command::USB_INTERNAL_CHECK: return "USB_INTERNAL_CHECK";
+	case Command::CHANGE_BAUD_RATE: return "CHANGE_BAUD_RATE";
+	case Command::SET_IAP_MODE: return "SET_IAP_MODE";
+	case Command::CMOS_LED: return "CMOS_LED";
+	case Command::GET_ENROLL_COUNT: return "GET_ENROLL_COUNT";
+	case Command::CHECK_ENROLLED: return "CHECK_ENROLLED";
+	case Command::ENROLL_START: return "ENROLL_START";
+	case Command::ENROLL_1: return "ENROLL_1";
+	case Command::ENROLL_2: return "ENROLL_2";
+	case Command::ENROLL_3: return "ENROLL_3";
+	case Command::IS_PRESS_FINGER: return "IS_PRESS_FINGER";
+	case Command::DELETE_ID: return "DELETE_ID";
+	case Command::DELETE_ALL: return "DELETE_ALL";
+	case Command::VERIFY: return "VERIFY";
+	case Command::IDENTIFY: return "IDENTIFY";
+	case Command::VERIFY_TEMPLATE: return "VERIFY_TEMPLATE";
+	case Command::IDENTIFY_TEMPLATE: return "IDENTIFY_TEMPLATE";
+	case Command::CAPTURE_FINGER: return "CAPTURE_FINGER";
+	case Command::MAKE_TEMPLATE: return "MAKE_TEMPLATE";
+	case Command::GET_IMAGE: return "GET_IMAGE";
+	case Command::GET_RAW_IMAGE: return "GET_RAW_IMAGE";
+	case Command::GET_TEMPLATE: return "GET_TEMPLATE";
+	case Command::SET_TEMPLATE: return "SET_TEMPLATE";
+	case Command::GET_DATABASE_START: return "GET_DATABASE_START";
+	case Command::GET_DATABASE_END: return "GET_DATABASE_END";
+	case Command::UPGRADE_FIRMWARE: return "UPGRADE_FIRMWARE";
+	case Command::UPGRADE_ISO_CD_IMAGE: return "UPGRADE_ISO_CD_IMAGE";
+	case Command::ACK: return "ACK";
+	case Command::NACK: return "NACK";
 	}
 }
 
@@ -152,16 +189,16 @@ int calc_packet_checksum(T* packet)
 }
 
 template<typename T>
-unsigned char* create_packet(int flags, Command command)
+unsigned char* create_packet(Command command, int flags)
 {
 	auto packet = new T();
 
-	packet->start_code1  = START_CODE1;
-	packet->start_code2  = START_CODE2;
-	packet->device_id    = DEVICE_ID;
-	packet->parameter    = flags;
+	packet->start_code1 = START_CODE1;
+	packet->start_code2 = START_CODE2;
+	packet->device_id = DEVICE_ID;
+	packet->parameter = flags;
 	packet->command_code = command;
-	packet->checksum     = calc_packet_checksum<T>(packet);
+	packet->checksum = calc_packet_checksum<T>(packet);
 
 	return reinterpret_cast<unsigned char*>(packet);
 }

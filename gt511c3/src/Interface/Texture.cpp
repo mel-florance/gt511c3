@@ -37,10 +37,10 @@
 		stbi_set_flip_vertically_on_load(flipped);
 
 		if (load_from_memory && buffer != nullptr) {
-			stbi_load_from_memory(buffer, 320 * 240, &width, &height, &components_count, 4);
+			data = stbi_load_from_memory(buffer, sizeof buffer, &width, &height, &components_count, 3);
 		}
 		else {
-			data = stbi_load(filename.c_str(), &width, &height, &components_count, 0);
+			data = stbi_load(filename.c_str(), &width, &height, &components_count, 4);
 		}
 		
 		if (data == NULL)

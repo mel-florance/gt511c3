@@ -40,7 +40,6 @@ bool Scanner::connect()
 
 	if (opened) {
 		open(1);
-		Sleep(100);
 		toggle_led(1);
 	}
 
@@ -75,15 +74,15 @@ void Scanner::test_transmission()
 	std::cout << "End of transmission" << std::endl;
 }
 
-std::vector<std::string> Scanner::get_ports_list()
+std::unordered_map<std::string, std::string> Scanner::get_ports_list()
 {
 	auto devices = serial::list_ports();
 	auto it = devices.begin();
-	std::vector<std::string> out = {};
+	std::unordered_map<std::string, std::string> out = {};
 
 	while (it != devices.end()) {
 		serial::PortInfo device = *it++;
-		out.push_back(device.port);
+		out[device.port] = device.description;
 	}
 
 	return out;
@@ -92,7 +91,6 @@ std::vector<std::string> Scanner::get_ports_list()
 void Scanner::open(int flags)
 {
 	this->send<CommandPacket>(Command::OPEN, flags);
-
 	auto response = this->receive<ResponsePacket>();
 
 	if (response != nullptr) {
@@ -102,6 +100,9 @@ void Scanner::open(int flags)
 			if (infos != nullptr) {
 				device_infos = infos;
 			}
+		}
+		else if (response->command_code == NACK) {
+
 		}
 	}
 }
@@ -119,20 +120,98 @@ void Scanner::add_user(int flags) {
 	Sleep(100);
 }
 
-void Scanner::toggle_led(int flags)
+unsigned int Scanner::get_users_count()
 {
-	this->send<CommandPacket>(Command::CMOS_LED, flags);
+	this->send<CommandPacket>(Command::GET_ENROLL_COUNT);
+	auto response = this->receive<ResponsePacket>();
+
+	if (response != nullptr) {
+		if (response->command_code == Command::ACK) {
+			std::cout << "USERS COUNT: " << response->parameter << std::endl;
+			return response->parameter;
+		}
+	}
+
+	return 0;
 }
 
-bool Scanner::is_finger_pressed()
+bool Scanner::user_exists(int flags)
 {
-	this->send<CommandPacket>(Command::IS_PRESS_FINGER);
+	this->send<CommandPacket>(Command::CHECK_ENROLLED, flags);
+	auto response = this->receive<ResponsePacket>();
+
+	if (response != nullptr) {
+		if (response->command_code == Command::ACK) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Scanner::delete_user(int flags)
+{
+	this->send<CommandPacket>(Command::DELETE_ID, flags);
+	auto response = this->receive<ResponsePacket>();
+
+	if (response != nullptr) {
+		if (response->command_code == Command::ACK) {
+			return true;
+		}
+		else if (response->command_code == NACK) {
+			std::cout << "NAAAACK" << std::endl;
+		}
+	}
+
+	return false;
+}
+
+bool Scanner::delete_all_users()
+{
+	this->send<CommandPacket>(Command::DELETE_ALL);
+	auto response = this->receive<ResponsePacket>();
+
+	if (response != nullptr) {
+		if (response->command_code == Command::ACK) {
+			return true;
+		}
+		else if (response->command_code == NACK) {
+
+		}
+	}
+
+	return false;
+}
+
+bool Scanner::toggle_led(int flags)
+{
+	this->send<CommandPacket>(Command::CMOS_LED, flags);
 
 	auto response = this->receive<ResponsePacket>();
 
 	if (response != nullptr) {
 		if (response->command_code == Command::ACK) {
+			return true;
+		}
+		else if (response->command_code == NACK) {
+
+		}
+	}
+
+	return false;
+}
+
+bool Scanner::is_finger_pressed()
+{
+	this->send<CommandPacket>(Command::IS_PRESS_FINGER);
+	auto response = this->receive<ResponsePacket>();
+
+	if (response != nullptr) {
+		if (response->command_code == Command::ACK) {
 			return response->parameter == 0;
+		}
+		else if (response->command_code == NACK) {
+
 		}
 	}
 
@@ -142,13 +221,15 @@ bool Scanner::is_finger_pressed()
 bool Scanner::change_baud_rate(int flags)
 {
 	this->send<CommandPacket>(Command::CHANGE_BAUD_RATE, flags);
-
 	auto response = this->receive<ResponsePacket>();
 
 	if (response != nullptr) {
 		if (response->command_code == Command::ACK) {
-			std::cout << "Baud rate changed  to: " << flags << std::endl;
+			std::cout << "Baud rate changed  to: " << std::to_string(flags) << std::endl;
 			return true;
+		}
+		else if (response->command_code == NACK) {
+
 		}
 	}
 
@@ -216,6 +297,7 @@ Texture* Scanner::get_raw_image()
 {
 	std::cout << "-----------------------" << std::endl;
 
+
 	CommandPacket packet;
 	packet.start_code1 = START_CODE1;
 	packet.start_code2 = START_CODE2;
@@ -237,8 +319,6 @@ Texture* Scanner::get_raw_image()
 	size_t w = serial->write(d, PACKET_SIZE);
 	std::cout << "Bytes written: " << std::dec << w << std::endl;
 
-	Sleep(100);
-
 	uint8_t* readBuf = new uint8_t[PACKET_SIZE];
 	auto r = serial->read(readBuf, PACKET_SIZE);
 	std::cout << "Bytes read: " << std::dec << r << std::endl;
@@ -249,21 +329,24 @@ Texture* Scanner::get_raw_image()
 
 	if (res->command_code == Command::ACK) {
 		std::cout << "Acknowledge packet received" << std::endl;
-		std::cout << "Getting raw image..." << std::endl;
 
 		unsigned char gbyImgRaw[320 * 240];
-		unsigned char gbyImgRaw2[240 * 320 / 4];
-		serial->setTimeout(10000, 0, 0, 100, 0);
-		auto r2 = serial->read(gbyImgRaw2, sizeof gbyImgRaw2);
-		std::cout << "Image bytes read: " << std::dec << r2 << std::endl;
-
-		std::memset(gbyImgRaw, 0, sizeof gbyImgRaw);
+		unsigned char gbyImgRaw2[(240 * 320 / 4) + 6];
+	
+	
+		serial->setBaudrate(115200);
+		Sleep(300);
+		change_baud_rate(115200);
+		Sleep(300);
+		serial->setTimeout(0, 100, 1, 100, 1);
+		std::cout << "Getting raw image..." << std::endl;
+		auto b = serial->read(gbyImgRaw2, sizeof gbyImgRaw2 + 6);
+		std::cout << "Image bytes read: " << std::dec << int(b) << std::endl;
+		std::memset(gbyImgRaw, 66, sizeof gbyImgRaw);
 
 		int i, j;
-		for (i = 0; i < 120; i++)
-		{
-			for (j = 0; j < 160; j++)
-			{
+		for (i = 0; i < 120; i++) {
+			for (j = 0; j < 160; j++) {
 				gbyImgRaw[320 * (2 * i + 0) + (2 * j + 0)] = gbyImgRaw2[i * 160 + j];
 				gbyImgRaw[320 * (2 * i + 0) + (2 * j + 1)] = gbyImgRaw2[i * 160 + j];
 				gbyImgRaw[320 * (2 * i + 1) + (2 * j + 0)] = gbyImgRaw2[i * 160 + j];
@@ -272,7 +355,6 @@ Texture* Scanner::get_raw_image()
 		}
 
 		Texture* image = new Texture("raw");
-		image->load_from_memory = true;
 		image->load(gbyImgRaw);
 	}
 	else {
@@ -281,6 +363,12 @@ Texture* Scanner::get_raw_image()
 			std::endl;
 	}
 
+	Sleep(100);
+	serial->setBaudrate(9600);
+	Sleep(300);
+	change_baud_rate(9600);
+	Sleep(100);
+
 	return nullptr;
 }
 
@@ -288,17 +376,20 @@ template<typename T>
 size_t Scanner::send(Command command, int flags)
 {
 	std::cout << "-----------------------" << std::endl;
-	Sleep(50);
+	std::cout << "SENDING: " << command_to_string(command) << std::endl;
+	Sleep(100);
 
-	unsigned char* packet = create_packet<T>(flags, command);
+	unsigned char* packet = create_packet<T>(command, flags);
 	size_t bytes = serial->write(packet, PACKET_SIZE);
 
 	if (debug) {
+		std::cout << "Size: " << std::dec << bytes << std::endl;
+		std::cout << "Data: ";
+
 		for (int i = 0; i < PACKET_SIZE; i++)
 			std::cout << HEX(packet[i]) << " ";
 
 		std::cout << std::endl;
-		std::cout << "Bytes written: " << std::dec << bytes << std::endl;
 	}
 
 	return bytes;
@@ -307,7 +398,7 @@ size_t Scanner::send(Command command, int flags)
 template<typename T>
 T* Scanner::receive(size_t length, int offset)
 {
-	Sleep(50);
+	Sleep(100);
 
 	uint8_t* buffer = new uint8_t[length];
 	size_t bytes = serial->read(buffer, length);
@@ -318,7 +409,16 @@ T* Scanner::receive(size_t length, int offset)
 	auto response = reinterpret_cast<T*>(data);
 
 	if (debug) {
-		std::cout << "Bytes read: " << std::dec << bytes << std::endl;
+		std::cout << "-----------------------" << std::endl;
+		std::cout << "RECEIVED: " << command_to_string((Command)((ResponsePacket*)response)->command_code) << std::endl;
+	
+		std::cout << "Size: " << std::dec << bytes << std::endl;
+		std::cout << "Data: ";
+
+		for (int i = 0; i < bytes; i++)
+			std::cout << HEX(data[i]) << " ";
+
+		std::cout << std::endl;
 
 		if (response == nullptr) {
 			std::cout << "Error while decoding packet." << std::endl;

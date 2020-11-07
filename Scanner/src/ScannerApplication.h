@@ -1,8 +1,11 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "Application/Application.h"
 #include "Interface/ImGuiLayer.h"
 #include "Scanner/Scanner.h"
+#include "DevicesManager.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -38,10 +41,14 @@ public:
 	bool device_opened;
 	std::string port;
 	bool serial_connected;
-
+	unsigned int users_count;
+	int user_to_delete;
 	DeviceInfoPacket* device_infos;
-	std::vector<std::string> ports_list;
+	std::unordered_map<std::string, std::string> ports_list;
 	const char* selected_port;
+	std::unique_ptr<Texture> fingerprint_icon;
+	std::unique_ptr<Texture> fingerprint_icon_highlight;
 private:
 	std::unique_ptr<Scanner> scanner;
+	std::unique_ptr<DevicesManager> devices_manager;
 };
