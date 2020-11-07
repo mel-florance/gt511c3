@@ -48,15 +48,6 @@ project "gt511c3"
 		"%{prj.name}/src"
 	}
 
-	links {
-		"serial",
-		"GLFW",
-		"Glad",
-		"imgui",
-		"Setupapi.lib",
-		"opengl32.lib",
-	}
-
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -67,6 +58,36 @@ project "gt511c3"
 			"GT_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE",
 			"_CRT_SECURE_NO_WARNINGS"
+		}
+
+		links {
+			"serial",
+			"GLFW",
+			"Glad",
+			"imgui",
+			"Setupapi.lib",
+			"opengl32.lib",
+		}
+
+	filter "system:linux"
+		cppdialect "C++17"
+		staticruntime "On"
+		systemversion "latest"
+
+		defines {
+			"IMGUI_API=__declspec(dllexport)",
+			"GT_PLATFORM_LINUX",
+			"GLFW_INCLUDE_NONE",
+			"_CRT_SECURE_NO_WARNINGS"
+		}
+
+		links {
+			"serial",
+			"GLFW",
+			"Glad",
+			"imgui",
+			"Setupapi.lib",
+			"opengl32.lib",
 		}
 
 	filter "configurations:Debug"
@@ -117,6 +138,15 @@ project "Scanner"
 
 		defines {
 			"GT_PLATFORM_WINDOWS"
+		}
+
+	filter "system:linux"
+		cppdialect "C++17"
+		staticruntime "On"
+		systemversion "latest"
+
+		defines {
+			"GT_PLATFORM_LINUX"
 		}
 
 	filter "configurations:Debug"
