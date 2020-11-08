@@ -127,7 +127,7 @@ public:
 	};
 
 	static inline std::string bytesToSize(uint64_t size) {
-		char* suffix[] = { "B", "KB", "MB", "GB", "TB" };
+		const char* suffix[] = { "B", "KB", "MB", "GB", "TB" };
 		char length = sizeof(suffix) / sizeof(suffix[0]);
 
 		int i = 0;
