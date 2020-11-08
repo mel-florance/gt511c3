@@ -101,6 +101,8 @@ project "gt511c3"
 			"Xrandr",
 			"Xinerama",
 			"GL",
+			"dl",
+			"pthread",
 			"Setupapi.lib",
 			"opengl32.lib"
 		}
