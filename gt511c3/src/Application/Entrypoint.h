@@ -3,6 +3,7 @@
 #include "Application.h"
 
 #ifdef GT_PLATFORM_WINDOWS
+#endif
 
 extern Application* createApplication();
 
@@ -13,4 +14,3 @@ int main(int argc, char** argv)
 	delete app;
 }
 
-#endif

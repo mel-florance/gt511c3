@@ -1,9 +1,6 @@
 [submodule "gt511c3/vendor/serial"]
 	path = gt511c3/vendor/serial
 	url = https://github.com/Vyraax/serial
-[submodule "gt511c3/vendor/imgui"]
-	path = gt511c3/vendor/imgui
-	url = https://github.com/Vyraax/imgui
 [submodule "gt511c3/vendor/GLFW"]
 	path = gt511c3/vendor/GLFW
 	url = https://github.com/TheCherno/GLFW
@@ -13,3 +10,6 @@
 [submodule "gt511c3/vendor/Glad"]
 	path = gt511c3/vendor/Glad
 	url = https://github.com/Vyraax/Glad
+[submodule "gt511c3/vendor/imgui"]
+	path = gt511c3/vendor/imgui
+	url = https://github.com/TheCherno/imgui
