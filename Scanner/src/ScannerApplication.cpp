@@ -111,31 +111,109 @@ void ApplicationLayer::OnEvent(Event& event) {
 
 }
 
+void ApplicationLayer::display_menu_bar()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Devices Manager...", "CTRL+D")) {}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Exit", "CTRL+Q")) {
+				Application::Get().close();
+			}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Parameters...", "CTRL+P")) {}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Window"))
+		{
+			if (ImGui::MenuItem("Users", "CTRL+U")) {}
+			if (ImGui::MenuItem("Log", "CTRL+L")) {}
+			if (ImGui::MenuItem("Details", "CTRL+D")) {}
+			if (ImGui::MenuItem("Toolbar", "CTRL+T")) {}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("Find updates...")) {}
+			ImGui::Separator();
+			if (ImGui::MenuItem("Manual")) {}
+			if (ImGui::MenuItem("Report a bug...")) {}
+			ImGui::Separator();
+			if (ImGui::MenuItem("About...")) {}
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+}
+
 void ApplicationLayer::OnImGuiRender()
 {
-	//ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(ImVec2(0, 0));
-	ImGui::SetNextWindowSize(ImVec2(1280.0f, 720.0f));
-	//ImGui::SetNextWindowViewport(viewport->ID);
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
 
 	bool p_open;
-	//static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
+	static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 	ImGuiWindowFlags window_flags =
+		ImGuiWindowFlags_NoBringToFrontOnFocus |
 		ImGuiWindowFlags_NoTitleBar |
-		//ImGuiWindowFlags_DockNodeHost |
-		ImGuiWindowFlags_NoResize |
-		ImGuiWindowFlags_NoBackground;
+		ImGuiWindowFlags_DockNodeHost |
+		ImGuiWindowFlags_MenuBar;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("ApplicationLayer", &p_open, window_flags);
 	ImGui::PopStyleVar();
 
-	//ImGui::SetNextWindowPos(viewport->Pos);
-	//ImGui::SetNextWindowSize(viewport->Size);
-	//ImGui::SetNextWindowViewport(viewport->ID);
-	ImGui::BeginChild("menus");
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("MainDock");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
+	}
+
+	display_menu_bar();
+
+	ImGuiWindowFlags win_flags = 0
+		| ImGuiWindowFlags_NoTitleBar
+		| ImGuiWindowFlags_NoScrollbar;
+
+	ImGuiWindowClass window_class;
+	window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+	ImGui::SetNextWindowClass(&window_class);
+	ImGui::Begin("Toolbar", NULL, win_flags);
+
+	ImGui::Button("Devices", ImVec2(0, 37));
+	ImGui::SameLine();
+	ImGui::Button("Abort", ImVec2(0, 37));
+	ImGui::SameLine();
+	ImGui::Button("Disconnect", ImVec2(0, 37));
+
+	ImGui::End();
+
+	ImGui::Begin("Users");
+	ImGui::End();
+
+	ImGui::Begin("Log");
+	ImGui::End();
+
+	ImGui::Begin("Details");
 
 	ImGui::SetNextItemWidth(150);
+
 	if (ImGui::BeginCombo("##ports_list", selected_port, 0))
 	{
 		for (auto it = ports_list.begin(); it != ports_list.end(); ++it) {
@@ -262,16 +340,16 @@ void ApplicationLayer::OnImGuiRender()
 	static float sz = 128.0f;
 	static float thickness = 4.0f;
 	static ImVec4 col = ImVec4();
-	void* tex = nullptr;
+	unsigned int tex = 0;
 	if (led_on)
 		col = ImVec4(0.3f, 0.8f, 0.9f, 1.0f);
 	else
 		col = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 
 	if (is_finger_pressed || image_download_progress > 0.0f)
-		tex = (void*)fingerprint_icon_highlight->getId();
+		tex = fingerprint_icon_highlight->getId();
 	else
-		tex = (void*)fingerprint_icon->getId();
+		tex = fingerprint_icon->getId();
 
 	const ImU32 col32 = ImColor(col);
 	float x = p.x + 4.0f, y = p.y + 4.0f, spacing = 8.0f;
@@ -280,7 +358,7 @@ void ApplicationLayer::OnImGuiRender()
 	draw_list->AddCircle(finger_pos, sz * 0.5f, col32, 64, thickness);
 	ImGui::SetCursorScreenPos(ImVec2(finger_pos.x - 36.5f, finger_pos.y - 49.5f));
 
-	ImGui::Image(tex, ImVec2(75.0f, 99.0f));
+	ImGui::Image((void*)(uintptr_t)tex, ImVec2(75.0f, 99.0f));
 
 	//std::lock_guard<std::mutex> lock(Scanner::mutex);
 
@@ -304,8 +382,8 @@ void ApplicationLayer::OnImGuiRender()
 		ImGui::SetCursorPosY(20);
 
 		ImGui::Image(
-			(void*)current_image->getId(),
-			ImVec2(240 * 4, 160 * 4),
+			(void*)(uintptr_t)current_image->getId(),
+			ImVec2(320 * 2, 240 * 2),
 			ImVec2(0.04, 0),
 			ImVec2(1, 1)
 		);
@@ -314,6 +392,6 @@ void ApplicationLayer::OnImGuiRender()
 	if (image_download_progress > 0.0f)
 		ImGui::ProgressBar(image_download_progress / 100.0f);
 
-	ImGui::EndChild();
+	ImGui::End();
 	ImGui::End();
 }

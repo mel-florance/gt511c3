@@ -448,24 +448,27 @@ Texture* Scanner::get_raw_image(std::atomic<float>& progress)
 template<typename T>
 size_t Scanner::send_command(Command command, int param)
 {
-	Utils::platform_sleep(50);
-	std::cout << "-----------------------" << std::endl;
-	std::cout << "SENDING: " << command_to_string(command) << std::endl;
+	if (serial->isOpen()) {
+		std::cout << "-----------------------" << std::endl;
+		std::cout << "SENDING: " << command_to_string(command) << std::endl;
 
-	unsigned char* packet = create_packet<T>(command, param);
-	size_t bytes = serial->write(packet, PACKET_SIZE);
+		unsigned char* packet = create_packet<T>(command, param);
+		size_t bytes = serial->write(packet, PACKET_SIZE);
 
-	if (debug) {
-		std::cout << "Size: " << std::dec << bytes << std::endl;
-		std::cout << "Data: ";
+		if (debug) {
+			std::cout << "Size: " << std::dec << bytes << std::endl;
+			std::cout << "Data: ";
 
-		for (int i = 0; i < PACKET_SIZE; i++)
-			std::cout << HEX(packet[i]) << " ";
+			for (int i = 0; i < PACKET_SIZE; i++)
+				std::cout << HEX(packet[i]) << " ";
 
-		std::cout << std::endl;
+			std::cout << std::endl;
+		}
+
+		return bytes;
 	}
 
-	return bytes;
+	return 0;
 }
 
 bool Scanner::receive_ack(int* param)
@@ -508,7 +511,6 @@ bool Scanner::receive_ack(int* param)
 
 int Scanner::receive_data(unsigned char* data, int length)
 {
-	Utils::platform_sleep(50);
 	auto size = length
 		+ PACKET_HEADER_SIZE
 		+ PACKET_DEVICE_ID_SIZE

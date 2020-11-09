@@ -30,6 +30,8 @@ public:
 	void OnImGuiRender();
 	void OnEvent(Event& event);
 
+	void display_menu_bar();
+
 	Engine* engine;
 	float led_timer;
 	bool is_led_blinking;
