@@ -34,6 +34,10 @@ project "gt511c3"
 		"-IGNORE:4006"
 	}
 
+	disablewarnings {
+		"4996"
+	}
+
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
@@ -123,6 +127,15 @@ project "Scanner"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	disablewarnings {
+		"4996"
+	}
+
+	linkoptions {
+		"-IGNORE:4221",
+		"-IGNORE:4006"
+	}
+
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
@@ -151,7 +164,8 @@ project "Scanner"
 		systemversion "latest"
 
 		defines {
-			"GT_PLATFORM_WINDOWS"
+			"GT_PLATFORM_WINDOWS",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "system:linux"
@@ -160,7 +174,8 @@ project "Scanner"
 		systemversion "latest"
 
 		defines {
-			"GT_PLATFORM_LINUX"
+			"GT_PLATFORM_LINUX",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "configurations:Debug"

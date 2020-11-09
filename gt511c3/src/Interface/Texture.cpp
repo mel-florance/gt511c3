@@ -37,10 +37,11 @@
 		stbi_set_flip_vertically_on_load(flipped);
 
 		if (load_from_memory && buffer != nullptr) {
-			data = stbi_load_from_memory(buffer, sizeof buffer, &width, &height, &components_count, 3);
+			data = stbi_load_from_memory(buffer, sizeof(buffer), &width, &height, &components_count, channel_type);
+			std::cout << "Texture components count: " << std::dec << components_count << std::endl;
 		}
 		else {
-			data = stbi_load(filename.c_str(), &width, &height, &components_count, 4);
+			data = stbi_load(filename.c_str(), &width, &height, &components_count, channel_type);
 		}
 		
 		if (data == NULL)

@@ -23,7 +23,7 @@ public:
 	void open(int flags);
 	void close();
 	void add_user(int flags);
-	unsigned int get_users_count();
+	int get_users_count();
 	bool user_exists(int flags);
 	bool delete_user(int flags);
 	bool delete_all_users();
@@ -41,10 +41,10 @@ public:
 	inline DeviceInfoPacket* get_device_infos() { return device_infos; }
 
 	template<typename T>
-	size_t send(Command command, int flags = 0);
+	size_t send_command(Command command, int param = 0);
 
-	template<typename T>
-	T* receive(size_t length = sizeof(T), int offset = 0);
+	bool receive_ack(int* param = nullptr);
+	int receive_data(unsigned char* data, int length);
 
 private:
 	std::unique_ptr<serial::Serial> serial;

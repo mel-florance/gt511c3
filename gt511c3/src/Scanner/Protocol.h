@@ -13,6 +13,8 @@
 #define DEVICE_ID 0x0001
 #define START_CODE1 0x55
 #define START_CODE2 0xAA
+#define START_CODE3 0x5A
+#define START_CODE4 0xA5
 
 #define HEX(x) \
 	std::setw(2) << std::setfill('0') << std::uppercase << std::hex << int(x)
@@ -148,7 +150,7 @@ struct CommandPacket {
 	unsigned char start_code1;
 	unsigned char start_code2;
 	unsigned short device_id;
-	unsigned int parameter;
+	int parameter;
 	unsigned short command_code;
 	unsigned short checksum;
 };
@@ -157,7 +159,7 @@ struct ResponsePacket {
 	unsigned char start_code1;
 	unsigned char start_code2;
 	unsigned short device_id;
-	unsigned int parameter;
+	int parameter;
 	unsigned short command_code;
 	unsigned short checksum;
 };
@@ -203,3 +205,21 @@ unsigned char* create_packet(Command command, int flags)
 	return reinterpret_cast<unsigned char*>(packet);
 }
 
+template <typename T>
+T swap_endian(T u)
+{
+	static_assert (CHAR_BIT == 8, "CHAR_BIT != 8");
+
+	union
+	{
+		T u;
+		unsigned char u8[sizeof(T)];
+	} source, dest;
+
+	source.u = u;
+
+	for (size_t k = 0; k < sizeof(T); k++)
+		dest.u8[k] = source.u8[sizeof(T) - k - 1];
+
+	return dest.u;
+}

@@ -49,6 +49,7 @@ public:
 	const char* selected_port;
 	std::unique_ptr<Texture> fingerprint_icon;
 	std::unique_ptr<Texture> fingerprint_icon_highlight;
+	Texture* current_image;
 private:
 	std::unique_ptr<Scanner> scanner;
 	std::unique_ptr<DevicesManager> devices_manager;
