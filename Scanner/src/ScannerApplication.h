@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <atomic>
 
 #include "Application/Application.h"
 #include "Interface/ImGuiLayer.h"
@@ -50,6 +51,7 @@ public:
 	std::unique_ptr<Texture> fingerprint_icon;
 	std::unique_ptr<Texture> fingerprint_icon_highlight;
 	Texture* current_image;
+	std::atomic<float> image_download_progress;
 private:
 	std::unique_ptr<Scanner> scanner;
 	std::unique_ptr<DevicesManager> devices_manager;

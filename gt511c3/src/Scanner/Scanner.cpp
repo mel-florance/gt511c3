@@ -7,11 +7,17 @@
 #include "Interface/Texture.h"
 #include "Core/Utils.h"
 #include <string>
+#include <thread>
 #include <iostream>
+#include <chrono>
 
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+using namespace std::chrono_literals;
+
+std::mutex Scanner::mutex = {};
 
 Scanner::Scanner() :
 	serial(nullptr),
@@ -35,8 +41,6 @@ bool Scanner::connect()
 {
 	try {
 		serial.reset(new serial::Serial(port, baud_rate));
-		//serial->setTimeout(0, 50, 0, 50, 0);
-
 	}
 	catch (std::exception e) {
 		std::cout << "Error while opening port " << port << std::endl;
@@ -56,7 +60,8 @@ bool Scanner::connect()
 void Scanner::disconnect()
 {
 	close();
-	delete device_infos;
+	serial->close();
+	//delete device_infos;
 }
 
 void Scanner::test_transmission()
@@ -96,20 +101,14 @@ std::unordered_map<std::string, std::string> Scanner::get_ports_list()
 
 void Scanner::open(int flags)
 {
-	this->send_command<CommandPacket>(Command::OPEN, 0);
+	this->send_command<CommandPacket>(Command::OPEN, 1);
 	auto ack = this->receive_ack();
 
 	if (ack) {
+		unsigned char* data = new unsigned char[sizeof DeviceInfoPacket];
+		auto succeed = this->receive_data(data, sizeof DeviceInfoPacket);
 
-		//serial->flushInput();
-		//delete device_infos;
-
-		//DeviceInfoPacket* infos = new DeviceInfoPacket();
-		//auto succeed = this->receive_data((unsigned char*)infos, sizeof DeviceInfoPacket);
-
-		//std::cout << "SERIAL:" << infos->serial_number << std::endl;
-
-		//device_infos = infos;
+		device_infos = reinterpret_cast<DeviceInfoPacket*>(data);
 	}
 }
 
@@ -121,6 +120,7 @@ void Scanner::close()
 	Utils::platform_sleep(100);
 	serial->setBaudrate(9600);
 	Utils::platform_sleep(100);
+
 	this->send_command<CommandPacket>(Command::CLOSE);
 }
 
@@ -245,7 +245,7 @@ unsigned char* Scanner::get_image()
 }
 
 
-Texture* Scanner::get_raw_image()
+Texture* Scanner::get_raw_image(std::atomic<float>& progress)
 {
 	std::cout << "-----------------------" << std::endl;
 	Utils::platform_sleep(100);
@@ -369,17 +369,27 @@ Texture* Scanner::get_raw_image()
 			0xF8,0x0,0xF9,0xF9,0xF9,0x0,0xFA,0xFA,0xFA,0x0,0xFB,0xFB,0xFB,0x0,0xFC,0xFC
 		};
 
-	
-
 		std::cout << "Getting raw image..." << std::endl;
-		auto b = serial->read(gbyImgRaw2, (240 * 320 / 4) + 6);
 
-	
+		size_t total = 0;
+		size_t max = (240 * 320 / 4) + 6;
+		unsigned char tmpBuf[33];
+		for (size_t i = 0; i < max; i += 33)
+		{
+			std::this_thread::sleep_for(0.0001s);
+
+			auto bytes = serial->read(tmpBuf, 33);
+			std::memcpy(gbyImgRaw2 + i, tmpBuf, 33);
+			total += bytes;
+			//std::cout << "Progress: " << total << " / " << max << std::endl;
+			
+			progress = ((float)total / (float)max) * 100.0f;
+		}
 
 		unsigned char pBuf[240 * 320 / 4];
 		std::memcpy(pBuf, gbyImgRaw2 + 4, sizeof(pBuf));
 
-		std::cout << "Image bytes read: " << std::dec << int(b) << std::endl;
+		std::cout << "Image bytes read: " << std::dec << int(total) << std::endl;
 		std::memset(gbyImgRaw, 66, sizeof(gbyImgRaw));
 
 		int i, j;
@@ -392,34 +402,31 @@ Texture* Scanner::get_raw_image()
 			}
 		}
 
-		auto cat = (unsigned char*)strcat((char*)&bitmap, (char*)gbyImgRaw);
+		unsigned char* final = new unsigned char[sizeof bitmap + sizeof gbyImgRaw2];
+
+		std::memcpy(final, bitmap, sizeof bitmap);
+		std::memcpy(final + sizeof bitmap, gbyImgRaw2, sizeof gbyImgRaw2);
+
+		//auto cat = (unsigned char*)strcat((char*)&bitmap, (char*)gbyImgRaw);
 
 		for (int i = 0; i < 14; i++)
-			std::cout << HEX(cat[i]) << " ";
+			std::cout << HEX(final[i]) << " ";
 
 		std::cout << std::endl;
 
 		std::ofstream stream("./data/image.bmp", std::ios::binary);
 
 		for (int i = 0; i < 20278; i++)
-			stream << cat[i];
+			stream << final[i];
 
 		stream.close();
 
-		Texture* image = new Texture(
-			"./data/image.bmp",
-			false,
-			false,
-			Texture::ChannelType::RGB,
-			true
-		);
-
-		image->load();
 		change_baud_rate(9600);
 		Utils::platform_sleep(100);
 		serial->setBaudrate(9600);
 		Utils::platform_sleep(100);
-		return image;
+
+		return nullptr;
 	} 
 	else {
 		std::cout << "Error: " <<
@@ -431,6 +438,9 @@ Texture* Scanner::get_raw_image()
 	Utils::platform_sleep(100);
 	serial->setBaudrate(9600);
 	Utils::platform_sleep(100);
+
+	serial->flush();
+	std::terminate();
 
 	return nullptr;
 }

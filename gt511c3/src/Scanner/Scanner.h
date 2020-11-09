@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <mutex>
+#include <atomic>
 #include <unordered_map>
 #include <serial/serial.h>
 
@@ -31,7 +33,7 @@ public:
 	bool is_finger_pressed();
 	bool change_baud_rate(int flags);
 	unsigned char* get_image();
-	Texture* get_raw_image();
+	Texture* get_raw_image(std::atomic<float>& progress);
 
 	inline void set_port(const std::string& port) {
 		int toto = 4;
@@ -46,6 +48,8 @@ public:
 	bool receive_ack(int* param = nullptr);
 	int receive_data(unsigned char* data, int length);
 
+	static std::mutex mutex;
+
 private:
 	std::unique_ptr<serial::Serial> serial;
 	DeviceInfoPacket* device_infos;
@@ -53,5 +57,7 @@ private:
 	unsigned int baud_rate;
 	unsigned int timeout;
 	bool debug;
+
+	
 };
 

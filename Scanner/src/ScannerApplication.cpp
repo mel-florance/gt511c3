@@ -1,6 +1,7 @@
 #include "ScannerApplication.h"
 #include <string>
 #include <sstream>
+#include <thread>
 
 #ifdef GT_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -46,7 +47,8 @@ ApplicationLayer::ApplicationLayer(Engine* engine) :
 	users_count(0),
 	user_to_delete(0),
 	devices_manager(nullptr),
-	current_image(nullptr)
+	current_image(nullptr),
+	image_download_progress(0.0f)
 {
 	scanner = std::make_unique<Scanner>();
 	devices_manager = std::make_unique<DevicesManager>();
@@ -167,7 +169,7 @@ void ApplicationLayer::OnImGuiRender()
 			serial_connected = scanner->connect();
 
 			if (serial_connected) {
-				/*device_infos = scanner->get_device_infos();
+				device_infos = scanner->get_device_infos();
 
 				Device device;
 				device.baud_rate = std::atoi(baud_rate);
@@ -187,7 +189,7 @@ void ApplicationLayer::OnImGuiRender()
 				device.users_count = users_count;
 
 				devices_manager->add_device(device);
-				devices_manager->save_devices("./data/devices.csv");*/
+				devices_manager->save_devices("./data/devices.csv");
 			}
 		}
 	}
@@ -221,7 +223,13 @@ void ApplicationLayer::OnImGuiRender()
 		}
 
 		if (ImGui::Button("Get raw image", ImVec2(150, 25))) {
-			current_image = scanner->get_raw_image();
+
+			std::thread thread([&]() {
+				std::cout << "Starting thread..." << std::endl;
+				scanner->get_raw_image(image_download_progress);
+			});
+
+			thread.detach();
 		}
 
 		if (ImGui::Button("Toggle led", ImVec2(150, 25))) {
@@ -260,7 +268,7 @@ void ApplicationLayer::OnImGuiRender()
 	else
 		col = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 
-	if (is_finger_pressed)
+	if (is_finger_pressed || image_download_progress > 0.0f)
 		tex = (void*)fingerprint_icon_highlight->getId();
 	else
 		tex = (void*)fingerprint_icon->getId();
@@ -274,17 +282,38 @@ void ApplicationLayer::OnImGuiRender()
 
 	ImGui::Image(tex, ImVec2(75.0f, 99.0f));
 
+	//std::lock_guard<std::mutex> lock(Scanner::mutex);
+
+	if (image_download_progress == 100.0f) {
+		Utils::platform_sleep(100);
+		Texture* image = new Texture(
+			"./data/image.bmp",
+			false,
+			false,
+			Texture::ChannelType::RGB,
+			true
+		);
+
+		image->load();
+		image_download_progress = 0.0f;
+		current_image = &(*image);
+	}
+
 	if (current_image != nullptr) {
 		ImGui::SetCursorPosX(300);
 		ImGui::SetCursorPosY(20);
+
 		ImGui::Image(
 			(void*)current_image->getId(),
-			ImVec2(current_image->getWidth() * 4, current_image->getHeight() * 4),
-			ImVec2(0, 0),
+			ImVec2(240 * 4, 160 * 4),
+			ImVec2(0.04, 0),
 			ImVec2(1, 1)
 		);
 	}
-	
+
+	if (image_download_progress > 0.0f)
+		ImGui::ProgressBar(image_download_progress / 100.0f);
+
 	ImGui::EndChild();
 	ImGui::End();
 }
