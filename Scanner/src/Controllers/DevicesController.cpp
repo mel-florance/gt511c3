@@ -1,11 +1,32 @@
-#include "DevicesManager.h"
+#include "DevicesController.h"
+#include "Application/Application.h"
+#include "Interface/ImGuiExtensions.h"
+#include "Controllers/ScannerController.h"
 
-DevicesManager::~DevicesManager()
+DevicesController::DevicesController() :
+	Controller(),
+	current_device(nullptr),
+	current_name("")
 {
-
+	std::cout << "Loading existing devices..." << std::endl;
+	load_devices("./data/devices.csv");
 }
 
-Device* DevicesManager::add_device(const Device& device) {
+void DevicesController::OnEvent(Event& event)
+{
+}
+
+void DevicesController::OnUpdate(float delta)
+{
+}
+
+void DevicesController::OnRender()
+{
+	
+}
+
+
+Device* DevicesController::add_device(const Device& device) {
 	auto exists = std::find_if(devices.begin(), devices.end(), [=](const Device& item) {
 		return item.port == device.port;
 		});
@@ -17,18 +38,18 @@ Device* DevicesManager::add_device(const Device& device) {
 	return nullptr;
 }
 
-void DevicesManager::remove_device(size_t index) {
+void DevicesController::remove_device(size_t index) {
 	devices.erase(devices.begin() + index);
 }
 
-void DevicesManager::update_device(size_t index, const Device& data) {
+void DevicesController::update_device(size_t index, const Device& data) {
 	if (index >= 0 && index < devices.size() && devices.size() > 0) {
 		auto device = devices.at(index);
 		device = std::move(data);
 	}
 }
 
-std::vector<Device>& DevicesManager::load_devices(const std::string& filename) {
+std::vector<Device>& DevicesController::load_devices(const std::string& filename) {
 	std::ifstream file;
 	file.open(filename);
 	std::string line;
@@ -66,7 +87,7 @@ std::vector<Device>& DevicesManager::load_devices(const std::string& filename) {
 	return devices;
 }
 
-void DevicesManager::save_devices(const std::string& filename) {
+void DevicesController::save_devices(const std::string& filename) {
 	std::ofstream file;
 	file.open(filename, std::ios::out | std::ios::trunc);
 
@@ -102,3 +123,4 @@ void DevicesManager::save_devices(const std::string& filename) {
 
 	file.close();
 }
+

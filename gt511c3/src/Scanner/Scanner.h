@@ -19,24 +19,25 @@ public:
 
 	bool connect();
 	void disconnect();
-	void test_transmission();
 	std::unordered_map<std::string, std::string> get_ports_list();
 
 	void open(int flags);
 	void close();
-	void add_user(int flags);
+	int add_user(int flags, int quality = 0);
 	int get_users_count();
 	bool user_exists(int flags);
 	bool delete_user(int flags);
 	bool delete_all_users();
+	bool verify_user(int flags);
+	int identify_user();
 	bool toggle_led(int flags);
 	bool is_finger_pressed();
+	bool capture_finger(int flags);
 	bool change_baud_rate(int flags);
 	unsigned char* get_image();
-	Texture* get_raw_image(std::atomic<float>& progress);
+	Texture* get_raw_image(const std::string& filename, std::atomic<float>& progress);
 
 	inline void set_port(const std::string& port) {
-		int toto = 4;
 		this->port = port;
 	}
 
@@ -50,14 +51,29 @@ public:
 
 	static std::mutex mutex;
 
+	inline unsigned int getBaudRate() { return serial->getBaudrate();  }
+	inline serial::bytesize_t getDatabits() { return serial->getBytesize();  }
+	inline serial::parity_t getParity() { return serial->getParity();  }
+	inline serial::stopbits_t getStopbits() { return serial->getStopbits();  }
+	inline serial::flowcontrol_t getFlowcontrol() { return serial->getFlowcontrol();  }
+
+	inline bool getCD() { return serial->getCD(); }
+	inline bool getDSR() { return serial->getDSR(); }
+	inline bool getCTS() { return serial->getCTS(); }
+	inline bool getRI() { return serial->getRI(); }
+
+	inline size_t getTX() { return tx; }
+	inline size_t getRX() { return rx; }
+
 private:
-	std::unique_ptr<serial::Serial> serial;
+	serial::Serial* serial;
 	DeviceInfoPacket* device_infos;
 	std::string port;
 	unsigned int baud_rate;
 	unsigned int timeout;
 	bool debug;
 
-	
+	size_t tx;
+	size_t rx;
 };
 

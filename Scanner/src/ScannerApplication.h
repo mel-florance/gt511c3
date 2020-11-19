@@ -2,15 +2,22 @@
 
 #include <unordered_map>
 #include <atomic>
+#include <vector>
+#include <tuple>
+#include <time.h>
 
 #include "Application/Application.h"
+
 #include "Interface/ImGuiLayer.h"
+#include "Interface/ImGuiExtensions.h"
 #include "Scanner/Scanner.h"
-#include "DevicesManager.h"
+#include "IconsManager.h"
 #include "Core/Utils.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+
+#include "Application/Controller.h"
 
 class ScannerApplication : public Application
 {
@@ -54,7 +61,17 @@ public:
 	std::unique_ptr<Texture> fingerprint_icon_highlight;
 	Texture* current_image;
 	std::atomic<float> image_download_progress;
+	bool show_modal_devices_manager;
+	bool show_modal_add_user;
+	bool show_modal_parameters;
+	const char* selected_device;
+
+	char modal_user_name[20];
+	ImGui::Table users_table;
+
+	std::vector<std::tuple<tm, int, const char*>> log;
+
 private:
 	std::unique_ptr<Scanner> scanner;
-	std::unique_ptr<DevicesManager> devices_manager;
+	std::unique_ptr<IconsManager> icons_manager;
 };

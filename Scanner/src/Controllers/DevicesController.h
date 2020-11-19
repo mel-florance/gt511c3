@@ -10,6 +10,8 @@
 
 #define CSV_DELIMITER ';'
 
+#include "Application/Controller.h"
+
 struct Device {
 	std::string port;
 	std::string name;
@@ -25,10 +27,13 @@ struct Device {
 	std::string serial_number;
 };
 
-class DevicesManager
-{
+class DevicesController : public Controller {
 public:
-	~DevicesManager();
+	DevicesController();
+
+	void OnEvent(Event& event) override;
+	void OnUpdate(float delta) override;
+	void OnRender() override;
 
 	Device* add_device(const Device& device);
 	void remove_device(size_t index);
@@ -39,7 +44,7 @@ public:
 	inline std::vector<Device>& get_devices() { return devices; }
 	inline void set_devices(std::vector<Device>& devices) { this->devices = devices; }
 
-private:
+	Device* current_device;
+	std::string current_name;
 	std::vector<Device> devices;
 };
-

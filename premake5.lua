@@ -133,7 +133,8 @@ project "Scanner"
 
 	linkoptions {
 		"-IGNORE:4221",
-		"-IGNORE:4006"
+		"-IGNORE:4006",
+		"-IGNORE:4098"
 	}
 
 	files {
@@ -188,4 +189,4 @@ project "Scanner"
 		optimize "On"
 		symbols "Off"
 		kind "WindowedApp"
-		entrypoint "mainCRTStartup" 
+		entrypoint "mainCRTStartup"

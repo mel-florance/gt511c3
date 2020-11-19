@@ -12,7 +12,9 @@ Application* Application::s_Instance = nullptr;
 Application::Application(bool headless, const WindowProps& props) :
 	headless(headless),
 	m_Running(true),
-	m_windowProps(props)
+	m_windowProps(props),
+	states_index(0),
+	current_state(0)
 {
 	if (s_Instance)
 		std::cout << "Application already exists!" << std::endl;

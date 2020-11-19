@@ -8,14 +8,17 @@
 #include "Core/Utils.h"
 #include <string>
 #include <thread>
+#include <array>
 #include <iostream>
 #include <chrono>
+#include <experimental/filesystem>
 
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 using namespace std::chrono_literals;
+namespace fs = std::experimental::filesystem;
 
 std::mutex Scanner::mutex = {};
 
@@ -24,7 +27,9 @@ Scanner::Scanner() :
 	port("COM5"),	
 	baud_rate(9600),
 	timeout(16),
-	debug(true)
+	debug(true),
+	tx(0),
+	rx(0)
 {
 }
 
@@ -35,12 +40,14 @@ Scanner::~Scanner()
 	serial->setBaudrate(9600);
 	Utils::platform_sleep(100);
 	serial->close();
+
+	delete serial;
 }
 
 bool Scanner::connect()
 {
 	try {
-		serial.reset(new serial::Serial(port, baud_rate));
+		serial = new serial::Serial(port, baud_rate);
 	}
 	catch (std::exception e) {
 		std::cout << "Error while opening port " << port << std::endl;
@@ -62,27 +69,6 @@ void Scanner::disconnect()
 	close();
 	serial->close();
 	//delete device_infos;
-}
-
-void Scanner::test_transmission()
-{
-	int count = 0;
-	std::string payload = "test";
-
-	std::cout << "Testing transmission..." << std::endl;
-
-	while (count < 10) {
-		size_t written = serial->write(payload);
-		std::string response = serial->read(payload.length() + 1);
-
-		std::cout << "Bytes written: " << written << ", "
-			      << "Bytes read: " << response.length() << ", "
-				  << "Response: " << response << std::endl;
-
-		++count;
-	}
-
-	std::cout << "End of transmission" << std::endl;
 }
 
 std::unordered_map<std::string, std::string> Scanner::get_ports_list()
@@ -124,8 +110,75 @@ void Scanner::close()
 	this->send_command<CommandPacket>(Command::CLOSE);
 }
 
-void Scanner::add_user(int flags) {
-	// TODO
+int Scanner::add_user(int flags, int quality)
+{
+	int index = get_users_count();
+
+	if (index < 0)
+		return -1;
+
+	unsigned int max_tries = 10;
+	unsigned int tries = 0;
+
+	while (true) {
+		this->send_command<CommandPacket>(Command::ENROLL_START, index);
+		auto ack = this->receive_ack();
+
+		if (ack)
+			break;
+		else {
+			++tries;
+
+			if (tries >= max_tries)
+				return -1;
+
+			Utils::platform_sleep(50);
+		}
+	}
+
+	std::cout << "Determined new index: " << index << std::endl;
+
+	std::array<unsigned char, 3> steps = { 1, 2, 3 };
+
+	for (auto step : steps) {
+		unsigned int count = 0;
+
+		while (!capture_finger(quality)) {
+			++count;
+
+			if (count > max_tries)
+				return -1;
+
+			Utils::platform_sleep(50);
+		}
+
+		count = 0;
+
+		auto callback = [=](unsigned short i) -> bool {
+			auto command = Command::ENROLL_1;
+
+			if (i == 1) command = Command::ENROLL_1;
+			else if (i == 2) command = Command::ENROLL_2;
+			else if (i == 3) command = Command::ENROLL_3;
+
+			std::cout << "Enroll " << i << std::endl;
+
+			this->send_command<CommandPacket>(command);
+
+			return this->receive_ack();
+		};
+
+		while (!callback(step)) {
+			++count;
+
+			if (count >= max_tries)
+				return -1;
+
+			Utils::platform_sleep(50);
+		}
+	}
+
+	return index;
 }
 
 int Scanner::get_users_count()
@@ -134,9 +187,7 @@ int Scanner::get_users_count()
 	int param = 0;
 	auto ack = this->receive_ack(&param);
 
-	std::cout << "COUNT: " << std::dec << param << std::endl;
-
-	return ack ? param : 0;
+	return ack ? param : -1;
 }
 
 bool Scanner::user_exists(int flags)
@@ -148,6 +199,13 @@ bool Scanner::user_exists(int flags)
 bool Scanner::delete_user(int flags)
 {
 	this->send_command<CommandPacket>(Command::DELETE_ID, flags);
+
+	auto filename = std::string("./data/fingerprints/") + std::to_string(flags) + ".bmp";
+
+	if (fs::exists(filename)) {
+		fs::remove(filename);
+	}
+
 	return this->receive_ack();
 }
 
@@ -155,6 +213,22 @@ bool Scanner::delete_all_users()
 {
 	this->send_command<CommandPacket>(Command::DELETE_ALL);
 	return this->receive_ack();
+}
+
+bool Scanner::verify_user(int flags)
+{
+	this->send_command<CommandPacket>(Command::VERIFY, flags);
+	return this->receive_ack();
+}
+
+int Scanner::identify_user()
+{
+	this->send_command<CommandPacket>(Command::IDENTIFY);
+	int param = 0;
+
+	return this->receive_ack(&param)
+		? param
+		: -1;
 }
 
 bool Scanner::toggle_led(int flags)
@@ -173,6 +247,12 @@ bool Scanner::is_finger_pressed()
 		return param == 0;
 
 	return false;
+}
+
+bool Scanner::capture_finger(int flags)
+{
+	this->send_command<CommandPacket>(Command::CAPTURE_FINGER, flags);
+	return this->receive_ack();
 }
 
 bool Scanner::change_baud_rate(int flags)
@@ -245,7 +325,7 @@ unsigned char* Scanner::get_image()
 }
 
 
-Texture* Scanner::get_raw_image(std::atomic<float>& progress)
+Texture* Scanner::get_raw_image(const std::string& filename, std::atomic<float>& progress)
 {
 	std::cout << "-----------------------" << std::endl;
 	Utils::platform_sleep(100);
@@ -266,15 +346,13 @@ Texture* Scanner::get_raw_image(std::atomic<float>& progress)
 
 	std::cout << "Bytes sent: " << std::endl;
 
-	for (int i = 0; i < PACKET_SIZE; i++) {
+	for (int i = 0; i < PACKET_SIZE; i++)
 		std::cout << HEX(d[i]) << " ";
-	}
 
 	std::cout << std::endl;
 	Utils::platform_sleep(100);
 	size_t w = serial->write(d, PACKET_SIZE);
 	std::cout << "Bytes written: " << std::dec << w << std::endl;
-
 
 	uint8_t* readBuf = new uint8_t[PACKET_SIZE];
 	auto r = serial->read(readBuf, PACKET_SIZE);
@@ -374,6 +452,7 @@ Texture* Scanner::get_raw_image(std::atomic<float>& progress)
 		size_t total = 0;
 		size_t max = (240 * 320 / 4) + 6;
 		unsigned char tmpBuf[33];
+
 		for (size_t i = 0; i < max; i += 33)
 		{
 			std::this_thread::sleep_for(0.0001s);
@@ -381,7 +460,6 @@ Texture* Scanner::get_raw_image(std::atomic<float>& progress)
 			auto bytes = serial->read(tmpBuf, 33);
 			std::memcpy(gbyImgRaw2 + i, tmpBuf, 33);
 			total += bytes;
-			//std::cout << "Progress: " << total << " / " << max << std::endl;
 			
 			progress = ((float)total / (float)max) * 100.0f;
 		}
@@ -414,7 +492,11 @@ Texture* Scanner::get_raw_image(std::atomic<float>& progress)
 
 		std::cout << std::endl;
 
-		std::ofstream stream("./data/image.bmp", std::ios::binary);
+		if (!fs::is_directory("./data/fingerprints") || !fs::exists("./data/fingerprints")) {
+			fs::create_directory("./data/fingerprints"); // create src folder
+		}
+
+		std::ofstream stream(std::string("./data/fingerprints/") + filename + ".bmp", std::ios::binary);
 
 		for (int i = 0; i < 20278; i++)
 			stream << final[i];
@@ -454,6 +536,7 @@ size_t Scanner::send_command(Command command, int param)
 
 		unsigned char* packet = create_packet<T>(command, param);
 		size_t bytes = serial->write(packet, PACKET_SIZE);
+		tx = bytes;
 
 		if (debug) {
 			std::cout << "Size: " << std::dec << bytes << std::endl;
@@ -473,13 +556,12 @@ size_t Scanner::send_command(Command command, int param)
 
 bool Scanner::receive_ack(int* param)
 {
-	//Utils::platform_sleep(150);
-
 	std::cout << "-----------------------" << std::endl;
 	std::cout << "ACK: " << std::endl;
 
 	auto data = new uint8_t[PACKET_SIZE];
 	size_t bytes = serial->read(data, PACKET_SIZE);
+	rx = bytes;
 
 	std::cout << "Available: " << std::dec << serial->available() << std::endl;
 	
@@ -498,12 +580,14 @@ bool Scanner::receive_ack(int* param)
 		}
 	}
 
-
 	if (response->command_code == Command::ACK) {
 		if (param != nullptr)
 			*param = response->parameter;
 
 		return true;
+	}
+	else if (response->command_code == Command::NACK) {
+		std::cout << "Error: " << get_error_code(response->parameter) << std::endl;
 	}
 
 	return false;
@@ -518,6 +602,7 @@ int Scanner::receive_data(unsigned char* data, int length)
 
 	uint8_t* buffer = new uint8_t[size];
 	size_t bytes = serial->read(buffer, size);
+	rx = bytes;
 
 	if (bytes != size) {
 		//delete buffer;

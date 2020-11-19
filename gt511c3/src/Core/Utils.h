@@ -6,8 +6,10 @@
 #include <vector>
 #include <set>
 #include <sstream>
+#include <variant>
 #include <fstream>
 #include <iomanip>
+#include <typeinfo>
 
 #ifdef GT_PLATFORM_WINDOWS
 #include <Windows.h>

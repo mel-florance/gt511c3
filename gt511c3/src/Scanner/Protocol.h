@@ -5,8 +5,9 @@
 
 #define PACKET_SIZE 12
 #define PACKET_HEADER_SIZE 2
-#define PACKET_DEVICE_ID_SIZE 2
 #define PACKET_CHECKSUM_SIZE 2
+#define PACKET_DEVICE_ID_SIZE 2
+
 #define PACKET_IMAGE_SIZE 52116
 #define PACKET_RAW_IMAGE_SIZE 19200
 
@@ -86,7 +87,7 @@ std::string int_to_hex(T i)
 }
 
 static const char* get_error_code(int code) {
-	switch (std::atoi(int_to_hex(code).c_str())) {
+	switch (code) {
 	default:								return "UNDEFINED";
 	case Error::NACK_TIMEOUT:               return "NACK_TIMEOUT";
 	case Error::NACK_INVALID_BAUD_RATE:     return "NACK_INVALID_BAUD_RATE";
@@ -210,8 +211,7 @@ T swap_endian(T u)
 {
 	static_assert (CHAR_BIT == 8, "CHAR_BIT != 8");
 
-	union
-	{
+	union {
 		T u;
 		unsigned char u8[sizeof(T)];
 	} source, dest;
