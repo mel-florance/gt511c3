@@ -1,10 +1,10 @@
 #include "DetailsInterface.h"
 #include "Application/Application.h"
 #include "Controllers/AppController.h"
-
 #include "Controllers/ScannerController.h"
 
 User* DetailsInterface::current_user = nullptr;
+Texture* DetailsInterface::current_image = nullptr;
 std::shared_ptr<UsersController> DetailsInterface::users = nullptr;
 
 DetailsInterface::DetailsInterface()
@@ -68,7 +68,20 @@ void DetailsInterface::render()
 	}
 
 	ImGui::NextColumn();
-	ImGui::Text("Image");
+
+	if (current_image != nullptr) {
+
+		float ratio = current_image->getWidth() / current_image->getHeight();
+		float w = ImGui::GetColumnWidth();
+
+		ImGui::Image(
+			(void*)(uintptr_t)current_image->getId(),
+			ImVec2(w, w * ratio),
+			ImVec2(0.04f, 0.0f),
+			ImVec2(1.0f, 1.0f)
+		);
+	}
+	
 	ImGui::Columns(1);
 
 	ImGui::End();
@@ -77,4 +90,19 @@ void DetailsInterface::render()
 void DetailsInterface::on_user_selected(int id)
 {
 	current_user = &users->get_users().at(id);
+
+	if (current_image != nullptr) {
+		delete current_image;
+		current_image = nullptr;
+	}
+
+	current_image = new Texture(
+		std::string("./data/fingerprints/") + std::to_string(id) + ".bmp",
+		false,
+		false,
+		Texture::ChannelType::RGB,
+		true
+	);
+
+	current_image->load();
 }
