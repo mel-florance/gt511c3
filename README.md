@@ -14,7 +14,7 @@ You can access the documentation directly on the wiki page: [Documentation](http
 ###### Windows build
 
 ```console
-git clone https://github.com/Vyraax/gt511c3.git
+git clone --recursive https://github.com/Vyraax/gt511c3.git
 cd gt511c3
 ./GenerateProject.bat
 ```
