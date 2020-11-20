@@ -92,7 +92,8 @@ project "gt511c3"
 			"IMGUI_API=__attribute__((visibility(\"default\")))",
 			"GT_PLATFORM_LINUX",
 			"GLFW_INCLUDE_NONE",
-			"_CRT_SECURE_NO_WARNINGS"
+			"_CRT_SECURE_NO_WARNINGS",
+			"_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING"
 		}
 
 		links {
@@ -166,7 +167,8 @@ project "Scanner"
 
 		defines {
 			"GT_PLATFORM_WINDOWS",
-			"_CRT_SECURE_NO_WARNINGS"
+			"_CRT_SECURE_NO_WARNINGS",
+			"_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING"
 		}
 
 	filter "system:linux"
