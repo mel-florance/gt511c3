@@ -66,7 +66,8 @@ project "gt511c3"
 			"IMGUI_API=__declspec(dllexport)",
 			"GT_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE",
-			"_CRT_SECURE_NO_WARNINGS"
+			"_CRT_SECURE_NO_WARNINGS",
+			"_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING"
 		}
 
 		links {
@@ -178,7 +179,8 @@ project "Scanner"
 
 		defines {
 			"GT_PLATFORM_LINUX",
-			"_CRT_SECURE_NO_WARNINGS"
+			"_CRT_SECURE_NO_WARNINGS",
+			"_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING"
 		}
 
 	filter "configurations:Debug"
