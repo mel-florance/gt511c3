@@ -4,7 +4,7 @@
 ![Screenshot](https://raw.githubusercontent.com/mel-florance/gt511c3/master/resources/screenshot.jpg)
 
 ## Documentation
-You can access the documentation directly on the wiki page: [Documentation](https://github.com/Vyraax/gt511c3/wiki)
+You can access the documentation directly on the wiki page: [Documentation](https://github.com/mel-florance/gt511c3/wiki)
 
 
 ## Compile from sources
@@ -12,7 +12,7 @@ You can access the documentation directly on the wiki page: [Documentation](http
 ###### Windows build
 
 ```console
-git clone --recursive https://github.com/Vyraax/gt511c3.git
+git clone --recursive https://github.com/mel-florance/gt511c3.git
 cd gt511c3
 ./GenerateProject.bat
 ```
@@ -23,5 +23,5 @@ Open the generated solution file (.sln), and click on the compile button.
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-[License](https://github.com/Vyraax/gt511c3/tree/master/LICENSE)
+[License](https://github.com/mel-florance/gt511c3/tree/master/LICENSE)
 
