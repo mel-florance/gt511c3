@@ -1,7 +1,7 @@
 # Fingerprint Scanner
 *A software to manage the gt511c3 electronic module.*
 
-![Screenshot](https://github.com/mel-florance/gt511c3/tree/master/resources/screenshot.jpg)
+![Screenshot](https://raw.githubusercontent.com/mel-florance/gt511c3/master/resources/screenshot.jpg)
 
 ## Documentation
 You can access the documentation directly on the wiki page: [Documentation](https://github.com/Vyraax/gt511c3/wiki)
