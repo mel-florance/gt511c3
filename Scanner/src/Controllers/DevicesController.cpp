@@ -61,22 +61,24 @@ std::vector<Device>& DevicesController::load_devices(const std::string& filename
 		if (index > 0) {
 			auto parts = Utils::splitString(line, std::string(1, CSV_DELIMITER));
 
-			Device device;
-			device.baud_rate = std::atoi(parts[0].c_str());
-			device.name = parts[1];
-			device.device_id = std::atoi(parts[2].c_str());
-			device.port = parts[3];
-			device.users_count = std::atoi(parts[4].c_str());
-			device.firmware_version = std::atoi(parts[5].c_str());
-			device.iso_area_max_size = std::atoi(parts[6].c_str());
-			device.serial_number = parts[7];
-			device.databits = (serial::bytesize_t)std::atoi(parts[8].c_str());
-			device.parity = (serial::parity_t)std::atoi(parts[9].c_str());
-			device.flow_control = (serial::flowcontrol_t)std::atoi(parts[10].c_str());
-			device.stopbits = (serial::stopbits_t)std::atoi(parts[11].c_str());
+			if (parts.size() > 11) {
+				Device device;
+				device.baud_rate = std::atoi(parts[0].c_str());
+				device.name = parts[1];
+				device.device_id = std::atoi(parts[2].c_str());
+				device.port = parts[3];
+				device.users_count = std::atoi(parts[4].c_str());
+				device.firmware_version = std::atoi(parts[5].c_str());
+				device.iso_area_max_size = std::atoi(parts[6].c_str());
+				device.serial_number = parts[7];
+				device.databits = (serial::bytesize_t)std::atoi(parts[8].c_str());
+				device.parity = (serial::parity_t)std::atoi(parts[9].c_str());
+				device.flow_control = (serial::flowcontrol_t)std::atoi(parts[10].c_str());
+				device.stopbits = (serial::stopbits_t)std::atoi(parts[11].c_str());
 
-			std::cout << "Loaded device " << device.device_id << std::endl;
-			devices.push_back(device);
+				std::cout << "Loaded device " << device.device_id << std::endl;
+				devices.push_back(device);
+			}
 		}
 
 		++index;

@@ -97,7 +97,7 @@ void DetailsInterface::on_user_selected(int id)
 	}
 
 	current_image = new Texture(
-		std::string("./data/fingerprints/") + std::to_string(id) + ".bmp",
+		std::string("./data/fingerprints/") + std::to_string(current_user->id) + ".bmp",
 		false,
 		false,
 		Texture::ChannelType::RGB,

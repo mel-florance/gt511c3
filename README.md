@@ -1,9 +1,7 @@
 # Fingerprint Scanner
 *A software to manage the gt511c3 electronic module.*
 
-[![GitHub license](https://img.shields.io/github/license/Vyraax/gt511c3.svg)](https://github.com/Vyraax/gt511c3/blob/master/LICENSE)&nbsp;
-[![GitHub tag](https://img.shields.io/github/tag/Vyraax/gt511c3.svg)](https://gitHub.com/Vyraax/gt511c3/tags/)&nbsp;
-![build](https://github.com/Vyraax/gt511c3/workflows/Windows%20x64/badge.svg?branch=master)
+![Screenshot](https://github.com/mel-florance/gt511c3/tree/master/resources/screenshot.jpg)
 
 ## Documentation
 You can access the documentation directly on the wiki page: [Documentation](https://github.com/Vyraax/gt511c3/wiki)

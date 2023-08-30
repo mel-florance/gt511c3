@@ -60,8 +60,7 @@ void Application::OnEvent(Event& event)
 
 	m_Engine->OnEvent(event);
 
-	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
-	{
+	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 		(*--it)->OnEvent(event);
 
 		if (event.Handled)

@@ -1,2 +1,2 @@
-Baud rate;Name;Device ID;Port;Users count;Firmware version;ISO area max size;Serial number;Databits;Parity;Flow control;Stopbits
-9600;USB Serial Port (COM5);1;COM5;0;20160920;0;EF13EF4014DC644064CD218330000000;8;0;0;1
+Baud rate	Name	Device ID	Port	Users count	Firmware version	ISO area max size	Serial number	Databits	Parity	Flow control	Stopbits
+9600	USB Serial Port (COM4)	1	COM4	0	20160920	0	EF13EF4014DC644064CD218330000000	8	0	0	1
